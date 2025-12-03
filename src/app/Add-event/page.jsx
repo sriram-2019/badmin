@@ -1,16 +1,20 @@
-"use client";
+// src/app/Add-event/page.jsx
+'use client';
 
 import React, { useState } from "react";
 
 /**
- * AddEventForm
+ * AddEventForm (named export)
  * Props:
  * - apiUrl (string) : base url of your Django app, e.g. http://localhost:8000
  * - authToken (string | null) : admin token (optional) to authorize POST requests
  * - onSuccess (fn) : optional callback receiving created event JSON
  */
-
-export default function AddEventForm({ apiUrl = "http://localhost:8000", authToken = null, onSuccess = null }) {
+export function AddEventForm({
+  apiUrl = "http://localhost:8000",
+  authToken = null,
+  onSuccess = null,
+}) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [formUrl, setFormUrl] = useState("");
@@ -37,7 +41,6 @@ export default function AddEventForm({ apiUrl = "http://localhost:8000", authTok
     setErrors(null);
     setSuccessMsg(null);
 
-    // basic client-side validation
     if (!title.trim()) {
       setErrors("Title is required.");
       return;
@@ -66,14 +69,12 @@ export default function AddEventForm({ apiUrl = "http://localhost:8000", authTok
       });
 
       if (!res.ok) {
-        // try to parse JSON error
         let payload = null;
         try {
           payload = await res.json();
         } catch (_) {
           throw new Error(`Server returned ${res.status}`);
         }
-        // show validation errors from server if present
         const serverErr = JSON.stringify(payload);
         throw new Error(serverErr || `Server returned ${res.status}`);
       }
@@ -227,3 +228,11 @@ export default function AddEventForm({ apiUrl = "http://localhost:8000", authTok
   );
 }
 
+/**
+ * Default page export — Next.js expects the page file to default-export a component.
+ * We render the named AddEventForm here. This ensures Next.js sees a valid component
+ * as the default export and avoids the "invalid default export" error.
+ */
+export default function Page() {
+  return <AddEventForm />;
+}
