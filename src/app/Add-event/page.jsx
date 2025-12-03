@@ -1,16 +1,15 @@
-// src/app/Add-event/page.jsx
 'use client';
 
 import React, { useState } from "react";
 
 /**
- * AddEventForm (named export)
+ * AddEventForm (local component, not a named export)
  * Props:
  * - apiUrl (string) : base url of your Django app, e.g. http://localhost:8000
  * - authToken (string | null) : admin token (optional) to authorize POST requests
  * - onSuccess (fn) : optional callback receiving created event JSON
  */
-export function AddEventForm({
+function AddEventForm({
   apiUrl = "http://localhost:8000",
   authToken = null,
   onSuccess = null,
@@ -230,8 +229,7 @@ export function AddEventForm({
 
 /**
  * Default page export — Next.js expects the page file to default-export a component.
- * We render the named AddEventForm here. This ensures Next.js sees a valid component
- * as the default export and avoids the "invalid default export" error.
+ * We render the AddEventForm here.
  */
 export default function Page() {
   return <AddEventForm />;
