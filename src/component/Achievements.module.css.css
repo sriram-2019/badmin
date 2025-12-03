@@ -1,0 +1,19 @@
+@keyframes glitter {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-glitter {
+  background-size: 200% 200%;
+  animation: glitter 4s linear infinite;
+}
+.achievement-card {
+  @apply bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 text-white p-4 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105;
+}
