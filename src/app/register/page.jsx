@@ -2,14 +2,17 @@
 
 import React, { useState, useRef } from "react";
 
-export default function RegisterUserTailwind({
-  apiUrl = "http://127.0.0.1:8000/api/registrations/",
-}) {
+// You can replace this with NEXT_PUBLIC_API_URL
+const apiUrlDefault =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://127.0.0.1:8000/api/registrations/";
+
+export default function RegisterUserTailwind() {
   const [form, setForm] = useState({
     name: "",
     age: "",
     gender: "",
-    event: "Badminton", // Event Name field (editable)
+    event: "Badminton",
     phone_no: "",
   });
 
@@ -20,6 +23,8 @@ export default function RegisterUserTailwind({
 
   const fileInputRef = useRef(null);
   const MAX_BYTES = 2 * 1024 * 1024; // 2MB
+
+  const apiUrl = apiUrlDefault; // <-- no props — safe for Next.js pages
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -83,11 +88,19 @@ export default function RegisterUserTailwind({
       const res = await fetch(apiUrl, { method: "POST", body: fd });
       const text = await res.text();
       let json;
-      try { json = JSON.parse(text); } catch {}
+      try {
+        json = JSON.parse(text);
+      } catch {}
 
       if (res.ok) {
         setStatus({ type: "success", text: "Registration successful!" });
-        setForm({ name: "", age: "", gender: "", event: "Badminton", phone_no: "" });
+        setForm({
+          name: "",
+          age: "",
+          gender: "",
+          event: "Badminton",
+          phone_no: "",
+        });
         clearFile();
       } else {
         setStatus({
@@ -107,7 +120,6 @@ export default function RegisterUserTailwind({
       <h3 className="text-2xl font-semibold mb-4">Badminton Registration</h3>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-
         {/* Name */}
         <div>
           <label className="text-sm font-medium">Name</label>
@@ -174,9 +186,11 @@ export default function RegisterUserTailwind({
           />
         </div>
 
-        {/* JPG Upload: hidden input + styled button */}
+        {/* JPG Upload */}
         <div>
-          <label className="text-sm font-medium">Upload JPG Proof (optional)</label>
+          <label className="text-sm font-medium">
+            Upload JPG Proof (optional)
+          </label>
           <div className="mt-2 flex items-center gap-4">
             <input
               ref={fileInputRef}
@@ -195,7 +209,9 @@ export default function RegisterUserTailwind({
             </button>
 
             <div className="flex items-center gap-3">
-              {file && <div className="text-sm text-gray-700">{file.name}</div>}
+              {file && (
+                <div className="text-sm text-gray-700">{file.name}</div>
+              )}
               {preview && (
                 <img
                   src={preview}
@@ -229,7 +245,13 @@ export default function RegisterUserTailwind({
           <button
             type="button"
             onClick={() => {
-              setForm({ name: "", age: "", gender: "", event: "Badminton", phone_no: "" });
+              setForm({
+                name: "",
+                age: "",
+                gender: "",
+                event: "Badminton",
+                phone_no: "",
+              });
               clearFile();
               setStatus({ type: "", text: "" });
             }}
