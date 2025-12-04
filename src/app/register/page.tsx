@@ -1,13 +1,25 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, ChangeEvent, FormEvent } from "react";
 
-// 1. Define the API URL as a constant here (or use process.env)
 const API_URL = "http://127.0.0.1:8000/api/registrations/";
 
-// 2. Remove props from the function arguments
+// Define the shape of our form data
+interface FormData {
+  name: string;
+  age: string;
+  gender: string;
+  event: string;
+  phone_no: string;
+}
+
+interface StatusData {
+  type: "success" | "error" | "";
+  text: string;
+}
+
 export default function RegisterUserTailwind() {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<FormData>({
     name: "",
     age: "",
     gender: "",
@@ -15,15 +27,16 @@ export default function RegisterUserTailwind() {
     phone_no: "",
   });
 
-  const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const [status, setStatus] = useState({ type: "", text: "" });
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [status, setStatus] = useState<StatusData>({ type: "", text: "" });
   const [loading, setLoading] = useState(false);
 
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const MAX_BYTES = 2 * 1024 * 1024; // 2MB
 
-  function handleChange(e) {
+  // FIX 1: Add type for input change events (covers input and select)
+  function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const { name, value } = e.target;
     setForm((p) => ({ ...p, [name]: value }));
   }
@@ -32,7 +45,8 @@ export default function RegisterUserTailwind() {
     if (fileInputRef.current) fileInputRef.current.click();
   }
 
-  function handleFile(e) {
+  // FIX 2: Add type for file input change
+  function handleFile(e: ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (!f) return clearFile();
 
@@ -50,7 +64,7 @@ export default function RegisterUserTailwind() {
     setStatus({ type: "", text: "" });
 
     const reader = new FileReader();
-    reader.onload = () => setPreview(reader.result);
+    reader.onload = () => setPreview(reader.result as string);
     reader.readAsDataURL(f);
   }
 
@@ -60,13 +74,14 @@ export default function RegisterUserTailwind() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
-  function validate() {
+  function validate(): string | null {
     if (!form.name.trim()) return "Name is required.";
     if (!form.phone_no.trim()) return "Phone number required.";
     return null;
   }
 
-  async function handleSubmit(e) {
+  // FIX 3: Add type for form submission
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setStatus({ type: "", text: "" });
 
@@ -82,7 +97,6 @@ export default function RegisterUserTailwind() {
 
     try {
       setLoading(true);
-      // 3. Use the constant API_URL here
       const res = await fetch(API_URL, { method: "POST", body: fd });
       const text = await res.text();
       let json;
@@ -106,8 +120,8 @@ export default function RegisterUserTailwind() {
           text: json ? JSON.stringify(json) : "Server error",
         });
       }
-    } catch (err) {
-      setStatus({ type: "error", text: "Network error: " + err.message });
+    } catch (err: any) {
+      setStatus({ type: "error", text: "Network error: " + (err.message || String(err)) });
     } finally {
       setLoading(false);
     }
@@ -263,8 +277,8 @@ export default function RegisterUserTailwind() {
           <div
             className={`mt-3 p-3 rounded ${
               status.type === "success"
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
             }`}
           >
             {status.text}
