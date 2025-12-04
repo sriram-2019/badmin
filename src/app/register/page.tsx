@@ -1,6 +1,11 @@
 "use client";
 
-import React, { useState, useRef, ChangeEvent, FormEvent } from "react";
+import React, {
+  useState,
+  useRef,
+  ChangeEvent,
+  FormEvent,
+} from "react";
 
 const API_URL = "http://127.0.0.1:8000/api/registrations/";
 
@@ -8,9 +13,15 @@ const API_URL = "http://127.0.0.1:8000/api/registrations/";
 interface FormData {
   name: string;
   age: string;
+  dob: string;
   gender: string;
-  event: string;
+  state: string;
+  district: string;
+  level: string; // National / State / District
+  email: string;
   phone_no: string;
+  address: string;
+  event: string; // still keep event = "Badminton"
 }
 
 interface StatusData {
@@ -22,9 +33,15 @@ export default function RegisterUserTailwind() {
   const [form, setForm] = useState<FormData>({
     name: "",
     age: "",
+    dob: "",
     gender: "",
-    event: "Badminton",
+    state: "",
+    district: "",
+    level: "",
+    email: "",
     phone_no: "",
+    address: "",
+    event: "Badminton",
   });
 
   const [file, setFile] = useState<File | null>(null);
@@ -35,8 +52,9 @@ export default function RegisterUserTailwind() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const MAX_BYTES = 2 * 1024 * 1024; // 2MB
 
-  // FIX 1: Add type for input change events (covers input and select)
-  function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+  function handleChange(
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) {
     const { name, value } = e.target;
     setForm((p) => ({ ...p, [name]: value }));
   }
@@ -45,7 +63,6 @@ export default function RegisterUserTailwind() {
     if (fileInputRef.current) fileInputRef.current.click();
   }
 
-  // FIX 2: Add type for file input change
   function handleFile(e: ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (!f) return clearFile();
@@ -76,11 +93,16 @@ export default function RegisterUserTailwind() {
 
   function validate(): string | null {
     if (!form.name.trim()) return "Name is required.";
-    if (!form.phone_no.trim()) return "Phone number required.";
+    if (!form.age.trim()) return "Age is required.";
+    if (!form.dob.trim()) return "Date of birth is required.";
+    if (!form.gender.trim()) return "Gender is required.";
+    if (!form.state.trim()) return "State is required.";
+    if (!form.level.trim()) return "Level of playing is required.";
+    if (!form.email.trim()) return "Email ID is required.";
+    if (!form.phone_no.trim()) return "Contact number is required.";
     return null;
   }
 
-  // FIX 3: Add type for form submission
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setStatus({ type: "", text: "" });
@@ -109,9 +131,15 @@ export default function RegisterUserTailwind() {
         setForm({
           name: "",
           age: "",
+          dob: "",
           gender: "",
-          event: "Badminton",
+          state: "",
+          district: "",
+          level: "",
+          email: "",
           phone_no: "",
+          address: "",
+          event: "Badminton",
         });
         clearFile();
       } else {
@@ -121,15 +149,20 @@ export default function RegisterUserTailwind() {
         });
       }
     } catch (err: any) {
-      setStatus({ type: "error", text: "Network error: " + (err.message || String(err)) });
+      setStatus({
+        type: "error",
+        text: "Network error: " + (err?.message || String(err)),
+      });
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-semibold mb-4">Badminton Registration</h3>
+    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow">
+      <h3 className="text-2xl font-semibold mb-4">
+        Badminton Registration
+      </h3>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Name */}
@@ -140,11 +173,11 @@ export default function RegisterUserTailwind() {
             value={form.name}
             onChange={handleChange}
             className="mt-1 w-full rounded border-gray-300 p-2"
-            placeholder="Enter your name"
+            placeholder="Enter your full name"
           />
         </div>
 
-        {/* Age & Gender */}
+        {/* Age & DOB */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="text-sm font-medium">Age</label>
@@ -157,44 +190,111 @@ export default function RegisterUserTailwind() {
               placeholder="Age"
             />
           </div>
-
           <div>
-            <label className="text-sm font-medium">Gender</label>
-            <select
-              name="gender"
-              value={form.gender}
+            <label className="text-sm font-medium">Date of Birth</label>
+            <input
+              name="dob"
+              value={form.dob}
+              type="date"
               onChange={handleChange}
               className="mt-1 w-full rounded border-gray-300 p-2"
-            >
-              <option value="">Select</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
+            />
           </div>
         </div>
 
-        {/* Event Name */}
+        {/* Gender */}
         <div>
-          <label className="text-sm font-medium">Event Name</label>
-          <input
-            name="event"
-            value={form.event}
+          <label className="text-sm font-medium">Gender</label>
+          <select
+            name="gender"
+            value={form.gender}
             onChange={handleChange}
             className="mt-1 w-full rounded border-gray-300 p-2"
-            placeholder="Event name (e.g. Badminton)"
+          >
+            <option value="">Select</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        {/* State & District */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label className="text-sm font-medium">State</label>
+            <input
+              name="state"
+              value={form.state}
+              onChange={handleChange}
+              className="mt-1 w-full rounded border-gray-300 p-2"
+              placeholder="State"
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium">District</label>
+            <input
+              name="district"
+              value={form.district}
+              onChange={handleChange}
+              className="mt-1 w-full rounded border-gray-300 p-2"
+              placeholder="District"
+            />
+          </div>
+        </div>
+
+        {/* Level of playing */}
+        <div>
+          <label className="text-sm font-medium">
+            Level of Playing
+          </label>
+          <select
+            name="level"
+            value={form.level}
+            onChange={handleChange}
+            className="mt-1 w-full rounded border-gray-300 p-2"
+          >
+            <option value="">Select</option>
+            <option value="National">National</option>
+            <option value="State">State</option>
+            <option value="District">District</option>
+          </select>
+        </div>
+
+        {/* Email ID */}
+        <div>
+          <label className="text-sm font-medium">Email ID</label>
+          <input
+            name="email"
+            value={form.email}
+            type="email"
+            onChange={handleChange}
+            className="mt-1 w-full rounded border-gray-300 p-2"
+            placeholder="you@example.com"
           />
         </div>
 
-        {/* Phone */}
+        {/* Contact Number */}
         <div>
-          <label className="text-sm font-medium">Phone Number</label>
+          <label className="text-sm font-medium">Contact Number</label>
           <input
             name="phone_no"
             value={form.phone_no}
             onChange={handleChange}
             className="mt-1 w-full rounded border-gray-300 p-2"
             placeholder="9876543210"
+          />
+        </div>
+
+        {/* Address */}
+        <div>
+          <label className="text-sm font-medium">Address</label>
+          <textarea
+            name="address"
+            value={form.address}
+            onChange={handleChange}
+            className="mt-1 w-full rounded border-gray-300 p-2"
+            placeholder="Full postal address"
+            rows={3}
           />
         </div>
 
@@ -222,7 +322,9 @@ export default function RegisterUserTailwind() {
 
             <div className="flex items-center gap-3">
               {file && (
-                <div className="text-sm text-gray-700">{file.name}</div>
+                <div className="text-sm text-gray-700">
+                  {file.name}
+                </div>
               )}
               {preview && (
                 <img
@@ -260,9 +362,15 @@ export default function RegisterUserTailwind() {
               setForm({
                 name: "",
                 age: "",
+                dob: "",
                 gender: "",
-                event: "Badminton",
+                state: "",
+                district: "",
+                level: "",
+                email: "",
                 phone_no: "",
+                address: "",
+                event: "Badminton",
               });
               clearFile();
               setStatus({ type: "", text: "" });
