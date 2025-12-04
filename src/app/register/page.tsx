@@ -2,31 +2,34 @@
 
 import React, { useState, useRef } from "react";
 
-// You can replace this with NEXT_PUBLIC_API_URL
-const apiUrlDefault =
+// Use env var in prod, fall back to localhost for dev
+const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   "http://127.0.0.1:8000/api/registrations/";
 
-export default function RegisterUserTailwind() {
+export default function RegisterPage() {
   const [form, setForm] = useState({
     name: "",
     age: "",
     gender: "",
-    event: "Badminton",
+    event: "Badminton", // Event Name field (editable)
     phone_no: "",
   });
 
-  const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const [status, setStatus] = useState({ type: "", text: "" });
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [status, setStatus] = useState<{ type: string; text: string }>({
+    type: "",
+    text: "",
+  });
   const [loading, setLoading] = useState(false);
 
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const MAX_BYTES = 2 * 1024 * 1024; // 2MB
 
-  const apiUrl = apiUrlDefault; // <-- no props — safe for Next.js pages
-
-  function handleChange(e) {
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) {
     const { name, value } = e.target;
     setForm((p) => ({ ...p, [name]: value }));
   }
@@ -35,7 +38,7 @@ export default function RegisterUserTailwind() {
     if (fileInputRef.current) fileInputRef.current.click();
   }
 
-  function handleFile(e) {
+  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (!f) return clearFile();
 
@@ -53,7 +56,7 @@ export default function RegisterUserTailwind() {
     setStatus({ type: "", text: "" });
 
     const reader = new FileReader();
-    reader.onload = () => setPreview(reader.result);
+    reader.onload = () => setPreview(reader.result as string);
     reader.readAsDataURL(f);
   }
 
@@ -69,7 +72,7 @@ export default function RegisterUserTailwind() {
     return null;
   }
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus({ type: "", text: "" });
 
@@ -80,14 +83,14 @@ export default function RegisterUserTailwind() {
     }
 
     const fd = new FormData();
-    Object.entries(form).forEach(([k, v]) => fd.append(k, v));
+    Object.entries(form).forEach(([k, v]) => fd.append(k, String(v)));
     if (file) fd.append("document", file);
 
     try {
       setLoading(true);
-      const res = await fetch(apiUrl, { method: "POST", body: fd });
+      const res = await fetch(API_URL, { method: "POST", body: fd });
       const text = await res.text();
-      let json;
+      let json: unknown;
       try {
         json = JSON.parse(text);
       } catch {}
@@ -105,10 +108,12 @@ export default function RegisterUserTailwind() {
       } else {
         setStatus({
           type: "error",
-          text: json ? JSON.stringify(json) : "Server error",
+          text = typeof json === "object" && json !== null
+            ? JSON.stringify(json)
+            : "Server error",
         });
       }
-    } catch (err) {
+    } catch (err: any) {
       setStatus({ type: "error", text: "Network error: " + err.message });
     } finally {
       setLoading(false);
