@@ -2,34 +2,28 @@
 
 import React, { useState, useRef } from "react";
 
-// Use env var in prod, fall back to localhost for dev
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  "http://127.0.0.1:8000/api/registrations/";
+// 1. Define the API URL as a constant here (or use process.env)
+const API_URL = "http://127.0.0.1:8000/api/registrations/";
 
-export default function RegisterPage() {
+// 2. Remove props from the function arguments
+export default function RegisterUserTailwind() {
   const [form, setForm] = useState({
     name: "",
     age: "",
     gender: "",
-    event: "Badminton", // Event Name field (editable)
+    event: "Badminton",
     phone_no: "",
   });
 
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
-  const [status, setStatus] = useState<{ type: string; text: string }>({
-    type: "",
-    text: "",
-  });
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [status, setStatus] = useState({ type: "", text: "" });
   const [loading, setLoading] = useState(false);
 
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const fileInputRef = useRef(null);
   const MAX_BYTES = 2 * 1024 * 1024; // 2MB
 
-  function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) {
+  function handleChange(e) {
     const { name, value } = e.target;
     setForm((p) => ({ ...p, [name]: value }));
   }
@@ -38,7 +32,7 @@ export default function RegisterPage() {
     if (fileInputRef.current) fileInputRef.current.click();
   }
 
-  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleFile(e) {
     const f = e.target.files?.[0];
     if (!f) return clearFile();
 
@@ -56,7 +50,7 @@ export default function RegisterPage() {
     setStatus({ type: "", text: "" });
 
     const reader = new FileReader();
-    reader.onload = () => setPreview(reader.result as string);
+    reader.onload = () => setPreview(reader.result);
     reader.readAsDataURL(f);
   }
 
@@ -72,7 +66,7 @@ export default function RegisterPage() {
     return null;
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setStatus({ type: "", text: "" });
 
@@ -83,14 +77,15 @@ export default function RegisterPage() {
     }
 
     const fd = new FormData();
-    Object.entries(form).forEach(([k, v]) => fd.append(k, String(v)));
+    Object.entries(form).forEach(([k, v]) => fd.append(k, v));
     if (file) fd.append("document", file);
 
     try {
       setLoading(true);
+      // 3. Use the constant API_URL here
       const res = await fetch(API_URL, { method: "POST", body: fd });
       const text = await res.text();
-      let json: unknown;
+      let json;
       try {
         json = JSON.parse(text);
       } catch {}
@@ -108,12 +103,10 @@ export default function RegisterPage() {
       } else {
         setStatus({
           type: "error",
-          text = typeof json === "object" && json !== null
-            ? JSON.stringify(json)
-            : "Server error",
+          text: json ? JSON.stringify(json) : "Server error",
         });
       }
-    } catch (err: any) {
+    } catch (err) {
       setStatus({ type: "error", text: "Network error: " + err.message });
     } finally {
       setLoading(false);
@@ -191,7 +184,7 @@ export default function RegisterPage() {
           />
         </div>
 
-        {/* JPG Upload */}
+        {/* JPG Upload: hidden input + styled button */}
         <div>
           <label className="text-sm font-medium">
             Upload JPG Proof (optional)
@@ -270,8 +263,8 @@ export default function RegisterPage() {
           <div
             className={`mt-3 p-3 rounded ${
               status.type === "success"
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-700"
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
             }`}
           >
             {status.text}
