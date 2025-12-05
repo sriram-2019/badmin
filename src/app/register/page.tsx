@@ -159,20 +159,21 @@ export default function RegisterUserTailwind() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-semibold mb-4">
-        Badminton Registration
-      </h3>
+    <div className="min-h-screen bg-gray-100 py-8 px-4">
+      <div className="max-w-2xl mx-auto p-8 bg-gray-50 rounded-xl shadow-2xl border-2 border-gray-300">
+        <h3 className="text-3xl font-bold mb-6 text-blue-900 text-center">
+          Badminton Registration
+        </h3>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Name */}
         <div>
-          <label className="text-sm font-medium">Name</label>
+          <label className="text-sm font-medium text-blue-900">Name</label>
           <input
             name="name"
             value={form.name}
             onChange={handleChange}
-            className="mt-1 w-full rounded border-gray-300 p-2"
+            className="mt-1 w-full rounded border-2 border-blue-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
             placeholder="Enter your full name"
           />
         </div>
@@ -180,36 +181,36 @@ export default function RegisterUserTailwind() {
         {/* Age & DOB */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="text-sm font-medium">Age</label>
+            <label className="text-sm font-medium text-blue-900">Age</label>
             <input
               name="age"
               value={form.age}
               type="number"
               onChange={handleChange}
-              className="mt-1 w-full rounded border-gray-300 p-2"
+              className="mt-1 w-full rounded border-2 border-blue-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
               placeholder="Age"
             />
           </div>
           <div>
-            <label className="text-sm font-medium">Date of Birth</label>
+            <label className="text-sm font-medium text-blue-900">Date of Birth</label>
             <input
               name="dob"
               value={form.dob}
               type="date"
               onChange={handleChange}
-              className="mt-1 w-full rounded border-gray-300 p-2"
+              className="mt-1 w-full rounded border-2 border-blue-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
             />
           </div>
         </div>
 
         {/* Gender */}
         <div>
-          <label className="text-sm font-medium">Gender</label>
+          <label className="text-sm font-medium text-blue-900">Gender</label>
           <select
             name="gender"
             value={form.gender}
             onChange={handleChange}
-            className="mt-1 w-full rounded border-gray-300 p-2"
+            className="mt-1 w-full rounded border-2 border-blue-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none bg-white"
           >
             <option value="">Select</option>
             <option value="male">Male</option>
@@ -221,22 +222,22 @@ export default function RegisterUserTailwind() {
         {/* State & District */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="text-sm font-medium">State</label>
+            <label className="text-sm font-medium text-blue-900">State</label>
             <input
               name="state"
               value={form.state}
               onChange={handleChange}
-              className="mt-1 w-full rounded border-gray-300 p-2"
+              className="mt-1 w-full rounded border-2 border-blue-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
               placeholder="State"
             />
           </div>
           <div>
-            <label className="text-sm font-medium">District</label>
+            <label className="text-sm font-medium text-blue-900">District</label>
             <input
               name="district"
               value={form.district}
               onChange={handleChange}
-              className="mt-1 w-full rounded border-gray-300 p-2"
+              className="mt-1 w-full rounded border-2 border-blue-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
               placeholder="District"
             />
           </div>
@@ -244,14 +245,14 @@ export default function RegisterUserTailwind() {
 
         {/* Level of playing */}
         <div>
-          <label className="text-sm font-medium">
+          <label className="text-sm font-medium text-blue-900">
             Level of Playing
           </label>
           <select
             name="level"
             value={form.level}
             onChange={handleChange}
-            className="mt-1 w-full rounded border-gray-300 p-2"
+            className="mt-1 w-full rounded border-2 border-blue-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none bg-white"
           >
             <option value="">Select</option>
             <option value="National">National</option>
@@ -262,37 +263,37 @@ export default function RegisterUserTailwind() {
 
         {/* Email ID */}
         <div>
-          <label className="text-sm font-medium">Email ID</label>
+          <label className="text-sm font-medium text-blue-900">Email ID</label>
           <input
             name="email"
             value={form.email}
             type="email"
             onChange={handleChange}
-            className="mt-1 w-full rounded border-gray-300 p-2"
+            className="mt-1 w-full rounded border-2 border-blue-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
             placeholder="you@example.com"
           />
         </div>
 
         {/* Contact Number */}
         <div>
-          <label className="text-sm font-medium">Contact Number</label>
+          <label className="text-sm font-medium text-blue-900">Contact Number</label>
           <input
             name="phone_no"
             value={form.phone_no}
             onChange={handleChange}
-            className="mt-1 w-full rounded border-gray-300 p-2"
+            className="mt-1 w-full rounded border-2 border-blue-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
             placeholder="9876543210"
           />
         </div>
 
         {/* Address */}
         <div>
-          <label className="text-sm font-medium">Address</label>
+          <label className="text-sm font-medium text-blue-900">Address</label>
           <textarea
             name="address"
             value={form.address}
             onChange={handleChange}
-            className="mt-1 w-full rounded border-gray-300 p-2"
+            className="mt-1 w-full rounded border-2 border-blue-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
             placeholder="Full postal address"
             rows={3}
           />
@@ -300,7 +301,7 @@ export default function RegisterUserTailwind() {
 
         {/* JPG Upload: hidden input + styled button */}
         <div>
-          <label className="text-sm font-medium">
+          <label className="text-sm font-medium text-blue-900">
             Upload JPG Proof (optional)
           </label>
           <div className="mt-2 flex items-center gap-4">
@@ -315,7 +316,7 @@ export default function RegisterUserTailwind() {
             <button
               type="button"
               onClick={onChooseFileClick}
-              className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md transition-all duration-200"
             >
               {file ? "Change File" : "Choose File"}
             </button>
@@ -351,7 +352,7 @@ export default function RegisterUserTailwind() {
           <button
             type="submit"
             disabled={loading}
-            className="px-4 py-2 rounded text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60"
+            className="px-6 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60 shadow-md transition-all duration-200 font-semibold"
           >
             {loading ? "Saving..." : "Submit"}
           </button>
@@ -375,7 +376,7 @@ export default function RegisterUserTailwind() {
               clearFile();
               setStatus({ type: "", text: "" });
             }}
-            className="px-4 py-2 rounded border"
+            className="px-6 py-2 rounded-lg border-2 border-blue-400 text-blue-700 hover:bg-blue-50 transition-all duration-200 font-semibold"
           >
             Clear
           </button>
@@ -393,6 +394,7 @@ export default function RegisterUserTailwind() {
           </div>
         )}
       </form>
+      </div>
     </div>
   );
 }
