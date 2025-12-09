@@ -123,89 +123,83 @@ const EventCard: React.FC<EventCardProps> = ({
       <div className="p-6 sm:p-8 md:p-10">
         
         {/* Key Information Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
           {/* Registration Period */}
-          <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl sm:rounded-2xl p-5 sm:p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-h-[140px]">
-            <div className="flex items-center gap-3 mb-3 flex-wrap">
-              <div className="bg-white/20 rounded-lg p-2 flex-shrink-0">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-sm sm:text-base uppercase tracking-wide whitespace-nowrap">Registration</h3>
+          <div className="w-full px-4 py-4 bg-white border border-gray-300 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors duration-200">
+            <div className="flex items-center gap-2 mb-2">
+              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <h3 className="font-semibold text-sm sm:text-base text-gray-700 uppercase tracking-wide">Registration</h3>
             </div>
             {(regFrom || regTo) ? (
               <>
                 {regFrom && regTo ? (
-                  <p className="text-lg sm:text-xl font-bold break-words">
+                  <p className="text-base sm:text-lg font-medium text-gray-800 break-words">
                     {regFrom === regTo ? formatDate(regFrom) : `${formatDate(regFrom)} - ${formatDate(regTo)}`}
                   </p>
                 ) : regFrom ? (
-                  <p className="text-lg sm:text-xl font-bold break-words">
+                  <p className="text-base sm:text-lg font-medium text-gray-800 break-words">
                     {formatDate(regFrom)}
                   </p>
                 ) : (
-                  <p className="text-base opacity-90">Dates TBA</p>
+                  <p className="text-sm text-gray-500">Dates TBA</p>
                 )}
                 {regDeadlineTime && (
-                  <p className="text-sm sm:text-base mt-2 opacity-90">
+                  <p className="text-sm text-gray-600 mt-1">
                     Closes at {formatTime(regDeadlineTime)}
                   </p>
                 )}
               </>
             ) : (
-              <p className="text-base opacity-90">Dates TBA</p>
+              <p className="text-sm text-gray-500">Dates TBA</p>
             )}
           </div>
 
           {/* Event Period */}
-          <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl sm:rounded-2xl p-5 sm:p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-h-[140px]">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-white/20 rounded-lg p-2">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-sm sm:text-base uppercase tracking-wide">Event Dates</h3>
+          <div className="w-full px-4 py-4 bg-white border border-gray-300 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors duration-200">
+            <div className="flex items-center gap-2 mb-2">
+              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <h3 className="font-semibold text-sm sm:text-base text-gray-700 uppercase tracking-wide">Event Dates</h3>
             </div>
             {(eventFrom || eventTo) ? (
               <>
                 {eventFrom && eventTo ? (
-                  <p className="text-lg sm:text-xl font-bold break-words">
+                  <p className="text-base sm:text-lg font-medium text-gray-800 break-words">
                     {eventFrom === eventTo ? formatDate(eventFrom) : `${formatDate(eventFrom)} - ${formatDate(eventTo)}`}
                   </p>
                 ) : eventFrom ? (
-                  <p className="text-lg sm:text-xl font-bold break-words">
+                  <p className="text-base sm:text-lg font-medium text-gray-800 break-words">
                     {formatDate(eventFrom)}
                   </p>
                 ) : (
-                  <p className="text-base opacity-90">Dates TBA</p>
+                  <p className="text-sm text-gray-500">Dates TBA</p>
                 )}
                 {eventTime && (
-                  <p className="text-sm sm:text-base mt-2 opacity-90">
+                  <p className="text-sm text-gray-600 mt-1">
                     Starts at {formatTime(eventTime)}
                   </p>
                 )}
               </>
             ) : (
-              <p className="text-base opacity-90">Dates TBA</p>
+              <p className="text-sm text-gray-500">Dates TBA</p>
             )}
           </div>
 
           {/* Entry Fee */}
-          <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl sm:rounded-2xl p-5 sm:p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-h-[140px]">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-white/20 rounded-lg p-2">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-sm sm:text-base uppercase tracking-wide">Entry Fee</h3>
+          <div className="w-full px-4 py-4 bg-white border border-gray-300 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors duration-200">
+            <div className="flex items-center gap-2 mb-2">
+              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h3 className="font-semibold text-sm sm:text-base text-gray-700 uppercase tracking-wide">Entry Fee</h3>
             </div>
             {entryFee ? (
-              <p className="text-2xl sm:text-3xl font-extrabold">₹{entryFee}</p>
+              <p className="text-xl sm:text-2xl font-bold text-gray-800">₹{entryFee}</p>
             ) : (
-              <p className="text-base opacity-90">TBA</p>
+              <p className="text-sm text-gray-500">TBA</p>
             )}
           </div>
         </div>
