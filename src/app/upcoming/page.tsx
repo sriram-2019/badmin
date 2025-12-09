@@ -315,30 +315,36 @@ const EventCard: React.FC<EventCardProps> = ({
                   }
                 }
                 
-                // Clean category name (remove any remaining time-related text)
+                // Clean category name (remove any remaining time-related text and "starts at")
                 let cleanCategoryName = cat
-                  .replace(/:\s*\d{1,2}:\d{2}(\s*(AM|PM))?/gi, '')
-                  .replace(/\s+\d{1,2}:\d{2}(\s*(AM|PM))?/gi, '')
-                  .replace(/\s+starts\s+at\s+\d{1,2}:\d{2}(\s*(AM|PM))?/gi, '')
+                  .replace(/:\s*\d{1,2}:\d{2}(\s*(AM|PM))?/gi, '') // Remove ": HH:MM" or ": HH:MM AM/PM"
+                  .replace(/\s+\d{1,2}:\d{2}(\s*(AM|PM))?/gi, '') // Remove " HH:MM" or " HH:MM AM/PM"
+                  .replace(/\s+starts\s+at\s+\d{1,2}:\d{2}(\s*(AM|PM))?/gi, '') // Remove " starts at HH:MM AM/PM"
+                  .replace(/\s+starts\s+at\s*$/gi, '') // Remove " starts at" at the end
+                  .replace(/\s+starts\s+at\s+/gi, ' ') // Remove " starts at" in the middle
+                  .replace(/\s+starts\s+at$/gi, '') // Remove trailing " starts at"
+                  .replace(/\s+/g, ' ') // Normalize multiple spaces to single space
                   .trim();
                 
-                // Build display text: Category name with time in one line
+                // Build display text: Category name with time in one line (only if time exists)
                 const displayText = categoryTime ? `${cleanCategoryName} - ${categoryTime}` : cleanCategoryName;
                 
-                // Color scheme for categories - cycle through different colors
+                // Color scheme for categories - cycle through different colors with better contrast
                 const categoryColors = [
-                  'bg-gradient-to-r from-indigo-100 to-purple-100 border-indigo-300 text-indigo-800',
-                  'bg-gradient-to-r from-pink-100 to-rose-100 border-pink-300 text-pink-800',
-                  'bg-gradient-to-r from-blue-100 to-cyan-100 border-blue-300 text-blue-800',
-                  'bg-gradient-to-r from-green-100 to-emerald-100 border-green-300 text-green-800',
-                  'bg-gradient-to-r from-yellow-100 to-amber-100 border-yellow-300 text-yellow-800',
-                  'bg-gradient-to-r from-orange-100 to-red-100 border-orange-300 text-orange-800',
+                  { bg: 'bg-gradient-to-br from-indigo-500 to-purple-600', border: 'border-indigo-400', text: 'text-white' },
+                  { bg: 'bg-gradient-to-br from-pink-500 to-rose-600', border: 'border-pink-400', text: 'text-white' },
+                  { bg: 'bg-gradient-to-br from-blue-500 to-cyan-600', border: 'border-blue-400', text: 'text-white' },
+                  { bg: 'bg-gradient-to-br from-green-500 to-emerald-600', border: 'border-green-400', text: 'text-white' },
+                  { bg: 'bg-gradient-to-br from-amber-500 to-orange-600', border: 'border-amber-400', text: 'text-white' },
+                  { bg: 'bg-gradient-to-br from-violet-500 to-purple-600', border: 'border-violet-400', text: 'text-white' },
                 ];
-                const colorClass = categoryColors[idx % categoryColors.length];
+                const colorScheme = categoryColors[idx % categoryColors.length];
                 
                 return (
-                  <div key={idx} className={`w-full px-4 py-3 ${colorClass} border-2 rounded-lg font-medium text-sm sm:text-base hover:shadow-md transition-all duration-200`}>
-                    {displayText}
+                  <div key={idx} className={`w-full px-5 py-4 ${colorScheme.bg} ${colorScheme.border} border-2 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1`}>
+                    <p className={`${colorScheme.text} font-semibold text-sm sm:text-base leading-relaxed`}>
+                      {displayText}
+                    </p>
                   </div>
                 );
               })}
