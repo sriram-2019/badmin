@@ -1,0 +1,20 @@
+# Copy-Paste These Commands in Order
+
+# Step 1: Navigate to project (if not already there)
+cd c:\Users\019301.MAA019301A\Desktop\badmitton\badminton
+
+# Step 2: Add all files to git
+git add .
+
+# Step 3: Make initial commit
+git commit -m "Initial commit - Badminton registration app"
+
+# Step 4: Add your GitHub repository (replace URL with your actual repo)
+git remote add origin https://github.com/sriram-2019/badminton.git
+
+# Step 5: Rename branch to main
+git branch -M main
+
+# Step 6: Push to GitHub
+git push -u origin main
+

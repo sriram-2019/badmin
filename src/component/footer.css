@@ -1,0 +1,63 @@
+
+
+
+.logo {
+    font-family: 'Roadgeek 2005 E series', sans-serif;
+    font-size: 32px;
+}
+
+.logo:hover {
+    filter: drop-shadow(0 0 2em #7ee7fa);
+}
+
+.logo .code {
+    color: #d3d3d3;
+}
+
+.logo .clubs {
+    color: #000;
+}
+
+.logo-footer {
+    font-size: 64px;
+}
+
+/* Ensure logo is visible in the footer */
+.logo-footer .clubs {
+    color: #fff;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(181, 182, 199, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+    }
+}
+
+@keyframes rotate {
+    from {
+        --angle: 0deg;
+    }
+
+    to {
+        --angle: 360deg;
+    }
+}
+
+@property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+.slide {
+    flex-shrink: 0;
+    width: 100%;
+}
