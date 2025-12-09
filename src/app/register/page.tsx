@@ -7,7 +7,7 @@ import React, {
   FormEvent,
 } from "react";
 
-const API_URL = "http://127.0.0.1:8000/api/registrations/";
+const API_URL = "https://BackendBadminton.pythonanywhere.com/api/registrations/";
 
 // Define the shape of our form data
 interface FormData {

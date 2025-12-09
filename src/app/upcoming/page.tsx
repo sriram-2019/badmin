@@ -467,7 +467,7 @@ const UpcomingEvents: React.FC = () => {
         setError(null);
 
         // Fetch only upcoming events (not ended) from Django API
-        const response = await fetch("http://localhost:8000/api/events/?upcoming=true");
+        const response = await fetch("https://BackendBadminton.pythonanywhere.com/api/events/?upcoming=true");
 
         if (!response.ok) {
           throw new Error("Failed to fetch events");

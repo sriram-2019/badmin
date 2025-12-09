@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-const API_URL = "http://127.0.0.1:8000/api/registrations/";
+const API_URL = "https://BackendBadminton.pythonanywhere.com/api/registrations/";
 
 interface RegistrationData {
   id: number;
@@ -37,7 +37,7 @@ export default function DashboardPage() {
   useEffect(() => {
     async function fetchEvents() {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/events/");
+        const res = await fetch("https://BackendBadminton.pythonanywhere.com/api/events/");
         if (res.ok) {
           const data = await res.json();
           setEvents(Array.isArray(data) ? data : [data]);
@@ -95,7 +95,7 @@ export default function DashboardPage() {
 
   async function downloadImage(registrationId: number) {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/registrations/${registrationId}/download-image/`);
+      const response = await fetch(`https://BackendBadminton.pythonanywhere.com/api/registrations/${registrationId}/download-image/`);
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -128,7 +128,7 @@ export default function DashboardPage() {
 
     try {
       setDeletingImage(registrationId);
-      const response = await fetch(`http://127.0.0.1:8000/api/registrations/${registrationId}/delete-image-file/`, {
+      const response = await fetch(`https://BackendBadminton.pythonanywhere.com/api/registrations/${registrationId}/delete-image-file/`, {
         method: 'DELETE',
       });
       
@@ -154,7 +154,7 @@ export default function DashboardPage() {
   async function downloadRegistrationsData() {
     try {
       // Build URL with event filter if selected
-      let csvUrl = `http://127.0.0.1:8000/api/registrations/export/csv/`;
+      let csvUrl = `https://BackendBadminton.pythonanywhere.com/api/registrations/export/csv/`;
       if (selectedEventId) {
         csvUrl += `?event_id=${selectedEventId}`;
       }

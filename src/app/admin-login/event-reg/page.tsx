@@ -69,7 +69,7 @@ const EventsPage: React.FC = () => {
     const fetchEvents = async () => {
       try {
         setIsLoadingEvents(true);
-        const response = await fetch("http://localhost:8000/api/events/");
+        const response = await fetch("https://BackendBadminton.pythonanywhere.com/api/events/");
         
         if (!response.ok) {
           throw new Error("Failed to fetch events");
@@ -186,7 +186,7 @@ const EventsPage: React.FC = () => {
       });
 
       // Adjust URL to match your Django REST API
-      const response = await fetch("http://localhost:8000/api/events/", {
+      const response = await fetch("https://BackendBadminton.pythonanywhere.com/api/events/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -223,7 +223,7 @@ const EventsPage: React.FC = () => {
 
       // Refresh events list from database to include the newly created event
       // This ensures we have the latest data from the database
-      const refreshResponse = await fetch("http://localhost:8000/api/events/");
+      const refreshResponse = await fetch("https://BackendBadminton.pythonanywhere.com/api/events/");
       if (refreshResponse.ok) {
         const refreshedData = await refreshResponse.json();
         const eventsList = Array.isArray(refreshedData) ? refreshedData : [refreshedData];
