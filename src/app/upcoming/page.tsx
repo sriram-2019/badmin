@@ -123,83 +123,89 @@ const EventCard: React.FC<EventCardProps> = ({
       <div className="p-6 sm:p-8 md:p-10">
         
         {/* Key Information Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-6 sm:mb-8">
           {/* Registration Period */}
-          <div className="w-full px-4 py-4 bg-white border border-gray-300 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors duration-200">
-            <div className="flex items-center gap-2 mb-2">
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <h3 className="font-semibold text-sm sm:text-base text-gray-700 uppercase tracking-wide">Registration</h3>
+          <div className="w-full px-5 py-5 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl border-2 border-blue-400 shadow-md hover:shadow-lg transition-all duration-200">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-white/20 rounded-lg p-2">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 className="font-bold text-sm sm:text-base text-white uppercase tracking-wide">Registration</h3>
             </div>
             {(regFrom || regTo) ? (
               <>
                 {regFrom && regTo ? (
-                  <p className="text-base sm:text-lg font-medium text-gray-800 break-words">
+                  <p className="text-lg sm:text-xl font-bold text-white break-words">
                     {regFrom === regTo ? formatDate(regFrom) : `${formatDate(regFrom)} - ${formatDate(regTo)}`}
                   </p>
                 ) : regFrom ? (
-                  <p className="text-base sm:text-lg font-medium text-gray-800 break-words">
+                  <p className="text-lg sm:text-xl font-bold text-white break-words">
                     {formatDate(regFrom)}
                   </p>
                 ) : (
-                  <p className="text-sm text-gray-500">Dates TBA</p>
+                  <p className="text-sm text-white/80">Dates TBA</p>
                 )}
                 {regDeadlineTime && (
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-sm text-white/90 mt-2">
                     Closes at {formatTime(regDeadlineTime)}
                   </p>
                 )}
               </>
             ) : (
-              <p className="text-sm text-gray-500">Dates TBA</p>
+              <p className="text-sm text-white/80">Dates TBA</p>
             )}
           </div>
 
           {/* Event Period */}
-          <div className="w-full px-4 py-4 bg-white border border-gray-300 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors duration-200">
-            <div className="flex items-center gap-2 mb-2">
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <h3 className="font-semibold text-sm sm:text-base text-gray-700 uppercase tracking-wide">Event Dates</h3>
+          <div className="w-full px-5 py-5 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl border-2 border-purple-400 shadow-md hover:shadow-lg transition-all duration-200">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-white/20 rounded-lg p-2">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 className="font-bold text-sm sm:text-base text-white uppercase tracking-wide">Event Dates</h3>
             </div>
             {(eventFrom || eventTo) ? (
               <>
                 {eventFrom && eventTo ? (
-                  <p className="text-base sm:text-lg font-medium text-gray-800 break-words">
+                  <p className="text-lg sm:text-xl font-bold text-white break-words">
                     {eventFrom === eventTo ? formatDate(eventFrom) : `${formatDate(eventFrom)} - ${formatDate(eventTo)}`}
                   </p>
                 ) : eventFrom ? (
-                  <p className="text-base sm:text-lg font-medium text-gray-800 break-words">
+                  <p className="text-lg sm:text-xl font-bold text-white break-words">
                     {formatDate(eventFrom)}
                   </p>
                 ) : (
-                  <p className="text-sm text-gray-500">Dates TBA</p>
+                  <p className="text-sm text-white/80">Dates TBA</p>
                 )}
                 {eventTime && (
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-sm text-white/90 mt-2">
                     Starts at {formatTime(eventTime)}
                   </p>
                 )}
               </>
             ) : (
-              <p className="text-sm text-gray-500">Dates TBA</p>
+              <p className="text-sm text-white/80">Dates TBA</p>
             )}
           </div>
 
           {/* Entry Fee */}
-          <div className="w-full px-4 py-4 bg-white border border-gray-300 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors duration-200">
-            <div className="flex items-center gap-2 mb-2">
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <h3 className="font-semibold text-sm sm:text-base text-gray-700 uppercase tracking-wide">Entry Fee</h3>
+          <div className="w-full px-5 py-5 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl border-2 border-green-400 shadow-md hover:shadow-lg transition-all duration-200">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-white/20 rounded-lg p-2">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="font-bold text-sm sm:text-base text-white uppercase tracking-wide">Entry Fee</h3>
             </div>
             {entryFee ? (
-              <p className="text-xl sm:text-2xl font-bold text-gray-800">₹{entryFee}</p>
+              <p className="text-2xl sm:text-3xl font-extrabold text-white">₹{entryFee}</p>
             ) : (
-              <p className="text-sm text-gray-500">TBA</p>
+              <p className="text-sm text-white/80">TBA</p>
             )}
           </div>
         </div>
@@ -319,8 +325,19 @@ const EventCard: React.FC<EventCardProps> = ({
                 // Build display text: Category name with time in one line
                 const displayText = categoryTime ? `${cleanCategoryName} - ${categoryTime}` : cleanCategoryName;
                 
+                // Color scheme for categories - cycle through different colors
+                const categoryColors = [
+                  'bg-gradient-to-r from-indigo-100 to-purple-100 border-indigo-300 text-indigo-800',
+                  'bg-gradient-to-r from-pink-100 to-rose-100 border-pink-300 text-pink-800',
+                  'bg-gradient-to-r from-blue-100 to-cyan-100 border-blue-300 text-blue-800',
+                  'bg-gradient-to-r from-green-100 to-emerald-100 border-green-300 text-green-800',
+                  'bg-gradient-to-r from-yellow-100 to-amber-100 border-yellow-300 text-yellow-800',
+                  'bg-gradient-to-r from-orange-100 to-red-100 border-orange-300 text-orange-800',
+                ];
+                const colorClass = categoryColors[idx % categoryColors.length];
+                
                 return (
-                  <div key={idx} className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-800 font-medium text-sm sm:text-base hover:border-indigo-400 hover:bg-indigo-50 transition-colors duration-200">
+                  <div key={idx} className={`w-full px-4 py-3 ${colorClass} border-2 rounded-lg font-medium text-sm sm:text-base hover:shadow-md transition-all duration-200`}>
                     {displayText}
                   </div>
                 );
