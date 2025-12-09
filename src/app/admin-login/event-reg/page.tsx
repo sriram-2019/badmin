@@ -42,6 +42,7 @@ interface Event {
   other_awards?: string;
   rules?: string;
   category_times?: string;
+  poster?: string | null;
 }
 
 const EventsPage: React.FC = () => {
@@ -70,16 +71,20 @@ const EventsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isLoadingEvents, setIsLoadingEvents] = useState(true);
+  const [posterFile, setPosterFile] = useState<File | null>(null);
+  const [posterPreview, setPosterPreview] = useState<string | null>(null);
 
   // Fetch previous events from database on component mount
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         setIsLoadingEvents(true);
-        const response = await fetch("https://BackendBadminton.pythonanywhere.com/api/events/");
+        const response = await fetch("http://localhost:8000/api/events/");
         
         if (!response.ok) {
-          throw new Error("Failed to fetch events");
+          const errorText = await response.text();
+          console.error("API Error Response:", errorText);
+          throw new Error(`Failed to fetch events: ${response.status} ${response.statusText}`);
         }
         
         const data = await response.json();
@@ -88,8 +93,12 @@ const EventsPage: React.FC = () => {
         setEvents(eventsList);
       } catch (err: any) {
         console.error("Error fetching events:", err);
-        // Don't show error to user, just log it
-        // Events will remain empty if fetch fails
+        // Show error to user if it's a network error
+        if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+          setError("Cannot connect to server. Make sure Django is running on http://localhost:8000");
+        } else {
+          setError(`Error loading events: ${err.message}`);
+        }
       } finally {
         setIsLoadingEvents(false);
       }
@@ -108,6 +117,34 @@ const EventsPage: React.FC = () => {
     }));
     setError(null);
     setSuccess(null);
+  };
+
+  const handlePosterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+      if (!validTypes.includes(file.type)) {
+        setError("Please upload a JPG, JPEG, or PNG image file.");
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setError("Image size should be less than 5MB.");
+        return;
+      }
+      
+      setPosterFile(file);
+      setError(null);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPosterPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const validate = (): boolean => {
@@ -192,31 +229,43 @@ const EventsPage: React.FC = () => {
         }
       });
 
+      // Use FormData to support file upload
+      const formDataToSend = new FormData();
+      formDataToSend.append('event_name', formData.event_name);
+      formDataToSend.append('registration_from', formData.registration_from);
+      formDataToSend.append('registration_to', formData.registration_to);
+      if (formData.registration_deadline_time) {
+        formDataToSend.append('registration_deadline_time', formData.registration_deadline_time);
+      }
+      formDataToSend.append('event_from', formData.event_from);
+      if (formData.event_to) {
+        formDataToSend.append('event_to', formData.event_to);
+      }
+      if (formData.event_time) {
+        formDataToSend.append('event_time', formData.event_time);
+      }
+      formDataToSend.append('event_place', formData.event_place);
+      formDataToSend.append('age_limit', ''); // Age limits are now part of categories
+      formDataToSend.append('categories', categoriesList.join(", "));
+      if (formData.entry_fee) {
+        formDataToSend.append('entry_fee', formData.entry_fee);
+      }
+      formDataToSend.append('winner_prize', formData.winner_prize || "");
+      formDataToSend.append('runner_prize', formData.runner_prize || "");
+      formDataToSend.append('semifinalist_prize', formData.semifinalist_prize || "");
+      formDataToSend.append('other_awards', formData.other_awards || "");
+      formDataToSend.append('rules', formData.rules || "");
+      formDataToSend.append('category_times', categoryTimesList.join(", "));
+      
+      // Add poster file if selected
+      if (posterFile) {
+        formDataToSend.append('poster', posterFile);
+      }
+
       // Adjust URL to match your Django REST API
-      const response = await fetch("https://BackendBadminton.pythonanywhere.com/api/events/", {
+      const response = await fetch("http://localhost:8000/api/events/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          event_name: formData.event_name,
-          registration_from: formData.registration_from,
-          registration_to: formData.registration_to,
-          registration_deadline_time: formData.registration_deadline_time || null,
-          event_from: formData.event_from,
-          event_to: formData.event_to || null,
-          event_time: formData.event_time || null,
-          event_place: formData.event_place,
-          age_limit: "", // Age limits are now part of categories, not a global field
-          categories: categoriesList.join(", "),
-          entry_fee: formData.entry_fee || null,
-          winner_prize: formData.winner_prize || "",
-          runner_prize: formData.runner_prize || "",
-          semifinalist_prize: formData.semifinalist_prize || "",
-          other_awards: formData.other_awards || "",
-          rules: formData.rules || "",
-          category_times: categoryTimesList.join(", "),
-        }),
+        body: formDataToSend, // Don't set Content-Type header, browser will set it with boundary
       });
 
       if (!response.ok) {
@@ -230,7 +279,7 @@ const EventsPage: React.FC = () => {
 
       // Refresh events list from database to include the newly created event
       // This ensures we have the latest data from the database
-      const refreshResponse = await fetch("https://BackendBadminton.pythonanywhere.com/api/events/");
+      const refreshResponse = await fetch("http://localhost:8000/api/events/");
       if (refreshResponse.ok) {
         const refreshedData = await refreshResponse.json();
         const eventsList = Array.isArray(refreshedData) ? refreshedData : [refreshedData];
@@ -260,6 +309,8 @@ const EventsPage: React.FC = () => {
         rules: "",
         category_times: "", // Will be auto-generated from categories
       });
+      setPosterFile(null);
+      setPosterPreview(null);
     } catch (err: any) {
       setError(err.message || "Something went wrong.");
     } finally {
@@ -409,6 +460,32 @@ const EventsPage: React.FC = () => {
                 placeholder="e.g. Auditorium, City Hall"
                 className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50"
               />
+            </div>
+
+            {/* Tournament Poster */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Tournament Poster
+              </label>
+              <input
+                type="file"
+                accept="image/jpeg,image/jpg,image/png"
+                onChange={handlePosterChange}
+                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50"
+              />
+              <p className="text-xs text-slate-400 mt-1">
+                Upload tournament poster image (JPG, JPEG, or PNG, max 5MB)
+              </p>
+              {posterPreview && (
+                <div className="mt-3">
+                  <p className="text-xs text-slate-600 mb-2">Preview:</p>
+                  <img
+                    src={posterPreview}
+                    alt="Poster preview"
+                    className="max-w-full h-auto max-h-48 rounded-lg border border-slate-200"
+                  />
+                </div>
+              )}
             </div>
 
             {/* Categories with Age Limits and Times */}
