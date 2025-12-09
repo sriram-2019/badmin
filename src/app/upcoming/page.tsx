@@ -220,10 +220,10 @@ const EventCard: React.FC<EventCardProps> = ({
               </div>
               <h3 className="text-xl sm:text-2xl font-bold text-gray-800">Tournament Categories</h3>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {parseCategories(categories).map((cat, idx) => {
                 // Extract time from the original categories field (combined format)
-                // Format: "Category Name: HH:MM" or "Category Name HH:MM"
+                // Format: "Category Name: HH:MM" or "Category Name HH:MM" or "Category Name starts at HH:MM"
                 let categoryTime = "";
                 
                 // First, try to find the original line in categories that contains this category
@@ -233,17 +233,27 @@ const EventCard: React.FC<EventCardProps> = ({
                   const lineLower = line.toLowerCase();
                   const catLower = cat.toLowerCase();
                   // Remove time from line for comparison
-                  const lineWithoutTime = line.replace(/:\s*\d{1,2}:\d{2}$/, '').replace(/\s+\d{1,2}:\d{2}$/, '').trim().toLowerCase();
+                  const lineWithoutTime = line.replace(/:\s*\d{1,2}:\d{2}/g, '').replace(/\s+\d{1,2}:\d{2}/g, '').replace(/\s+starts\s+at\s+\d{1,2}:\d{2}\s*(AM|PM)?/gi, '').trim().toLowerCase();
                   return lineWithoutTime === catLower || lineLower.includes(catLower);
                 });
                 
                 if (originalLine) {
-                  // Extract time from the original line
-                  const timeMatch = originalLine.match(/(\d{1,2}):(\d{2})/);
+                  // Extract time from the original line (handle both 24h and 12h formats)
+                  const timeMatch = originalLine.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
                   if (timeMatch) {
-                    const [hours, minutes] = timeMatch[0].split(':');
-                    const hour = parseInt(hours);
-                    const ampm = hour >= 12 ? "PM" : "AM";
+                    let hour = parseInt(timeMatch[1]);
+                    const minutes = timeMatch[2];
+                    const ampm = timeMatch[3] ? timeMatch[3].toUpperCase() : (hour >= 12 ? "PM" : "AM");
+                    
+                    // If no AM/PM specified, convert 24h to 12h
+                    if (!timeMatch[3]) {
+                      hour = hour % 12 || 12;
+                    } else if (ampm === "PM" && hour !== 12) {
+                      hour = hour + 12;
+                    } else if (ampm === "AM" && hour === 12) {
+                      hour = 0;
+                    }
+                    
                     const displayHour = hour % 12 || 12;
                     categoryTime = `${displayHour}:${minutes} ${ampm}`;
                   }
@@ -304,29 +314,12 @@ const EventCard: React.FC<EventCardProps> = ({
                   }
                 }
                 
-                // Extract age limit from category name if present
-                const ageMatch = cat.match(/(below|above|under|over)\s*(\d+)/i);
-                const ageInfo = ageMatch ? `${ageMatch[1]} ${ageMatch[2]}` : null;
-                const categoryNameWithoutAge = cat.replace(/\s*(below|above|under|over)\s*\d+/gi, '').trim();
+                // Build display text: Category name with time in one line
+                const displayText = categoryTime ? `${cat} - ${categoryTime}` : cat;
                 
                 return (
-                  <div key={idx} className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-4 sm:p-5 border-2 border-indigo-200 hover:border-indigo-400 transition-all duration-300 shadow-md hover:shadow-lg">
-                    {/* Category Name with Age Limit */}
-                    <div className="mb-3">
-                      <p className="text-gray-800 font-bold text-base sm:text-lg leading-tight">
-                        {cat}
-                      </p>
-                    </div>
-                    
-                    {/* Start Time */}
-                    {categoryTime && (
-                      <div className="flex items-center gap-2">
-                        <svg className="w-4 h-4 text-indigo-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <p className="text-indigo-700 font-semibold text-sm sm:text-base">Starts at {categoryTime}</p>
-                      </div>
-                    )}
+                  <div key={idx} className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-800 font-medium text-sm sm:text-base hover:border-indigo-400 hover:bg-indigo-50 transition-colors duration-200">
+                    {displayText}
                   </div>
                 );
               })}
