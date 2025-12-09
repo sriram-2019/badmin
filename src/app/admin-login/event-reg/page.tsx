@@ -23,10 +23,17 @@ interface EventFormData {
   category_times: string;
 }
 
-interface Event extends EventFormData {
+interface Event {
   id?: number | string;
+  event_name: string;
+  registration_from: string;
+  registration_to: string;
   registration_deadline_time?: string | null;
+  event_from: string;
+  event_to?: string | null;
   event_time?: string | null;
+  event_place: string;
+  age_limit?: string;
   categories?: string;
   entry_fee?: string | number | null;
   winner_prize?: string;
