@@ -81,17 +81,18 @@ const EventCard: React.FC<EventCardProps> = ({
   };
 
   // Helper to parse categories (comma or newline separated)
-  // Also handles combined format: "Category Name: HH:MM" - extracts just the category name
+  // Also handles combined format: "Category Name: HH:MM" or "Category Name starts at HH:MM" - extracts just the category name
   const parseCategories = (catStr?: string) => {
     if (!catStr) return [];
     return catStr.split(/[,\n]/).map(c => {
       const trimmed = c.trim();
-      // If line contains time format (e.g., "Category: HH:MM"), extract just the category part
-      const timeMatch = trimmed.match(/^(.+?):\s*\d{1,2}:\d{2}$/);
-      if (timeMatch) {
-        return timeMatch[1].trim();
-      }
-      return trimmed;
+      // Remove time patterns: "Category: HH:MM", "Category HH:MM", "Category starts at HH:MM AM/PM"
+      let cleaned = trimmed
+        .replace(/:\s*\d{1,2}:\d{2}(\s*(AM|PM))?/gi, '') // Remove ": HH:MM" or ": HH:MM AM/PM"
+        .replace(/\s+\d{1,2}:\d{2}(\s*(AM|PM))?/gi, '') // Remove " HH:MM" or " HH:MM AM/PM"
+        .replace(/\s+starts\s+at\s+\d{1,2}:\d{2}(\s*(AM|PM))?/gi, '') // Remove " starts at HH:MM AM/PM"
+        .trim();
+      return cleaned;
     }).filter(c => c);
   };
   return (
@@ -314,8 +315,15 @@ const EventCard: React.FC<EventCardProps> = ({
                   }
                 }
                 
+                // Clean category name (remove any remaining time-related text)
+                let cleanCategoryName = cat
+                  .replace(/:\s*\d{1,2}:\d{2}(\s*(AM|PM))?/gi, '')
+                  .replace(/\s+\d{1,2}:\d{2}(\s*(AM|PM))?/gi, '')
+                  .replace(/\s+starts\s+at\s+\d{1,2}:\d{2}(\s*(AM|PM))?/gi, '')
+                  .trim();
+                
                 // Build display text: Category name with time in one line
-                const displayText = categoryTime ? `${cat} - ${categoryTime}` : cat;
+                const displayText = categoryTime ? `${cleanCategoryName} - ${categoryTime}` : cleanCategoryName;
                 
                 return (
                   <div key={idx} className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-800 font-medium text-sm sm:text-base hover:border-indigo-400 hover:bg-indigo-50 transition-colors duration-200">
