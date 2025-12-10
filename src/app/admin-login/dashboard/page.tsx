@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import AdminNav from "../../../component/AdminNav";
 
 const API_URL = "http://localhost:8000/api/registrations/";
 
@@ -193,11 +194,13 @@ export default function DashboardPage() {
 
 
   return (
-    <div className="min-h-screen bg-slate-100 py-4 sm:py-8 px-3 sm:px-4">
-      <div className="w-full max-w-6xl mx-auto">
-        <h1 className="text-2xl sm:text-3xl font-semibold text-slate-800 mb-2">
-          Event Dashboard
-        </h1>
+    <>
+      <AdminNav />
+      <div className="min-h-screen bg-slate-100 py-4 sm:py-8 px-3 sm:px-4 pt-20 sm:pt-24">
+        <div className="w-full max-w-6xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-slate-800 mb-2">
+            Event Dashboard
+          </h1>
         <p className="text-xs sm:text-sm text-slate-500 mb-4 sm:mb-6">
           Choose what you want to manage.
         </p>
@@ -496,5 +499,6 @@ export default function DashboardPage() {
         )}
       </div>
     </div>
+    </>
   );
 }

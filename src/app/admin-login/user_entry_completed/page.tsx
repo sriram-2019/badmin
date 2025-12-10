@@ -5,7 +5,9 @@ import Link from "next/link";
 
 export default function UserEntryCompleted() {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center py-8 px-4">
+    <>
+      <AdminNav />
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center py-8 px-4 pt-20 sm:pt-24">
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
         <div className="mb-6">
           <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
@@ -47,6 +49,7 @@ export default function UserEntryCompleted() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

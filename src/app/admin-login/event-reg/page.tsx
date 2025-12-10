@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import AdminNav from "../../../component/AdminNav";
 
 interface EventFormData {
   event_name: string;
@@ -46,6 +47,17 @@ interface Event {
 }
 
 const EventsPage: React.FC = () => {
+  // Get today's date in YYYY-MM-DD format for date input min attribute
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const todayDate = getTodayDate();
+
   const [formData, setFormData] = useState<EventFormData>({
     event_name: "",
     registration_from: "",
@@ -319,8 +331,10 @@ const EventsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center py-10 px-4">
-      <div className="w-full max-w-5xl grid md:grid-cols-[1.1fr_0.9fr] gap-8">
+    <>
+      <AdminNav />
+      <div className="min-h-screen bg-slate-100 flex items-center justify-center py-10 px-4 pt-20 sm:pt-24">
+        <div className="w-full max-w-5xl grid md:grid-cols-[1.1fr_0.9fr] gap-8">
         {/* Form Card */}
         <div className="bg-white shadow-lg rounded-2xl p-6 md:p-8">
           <h1 className="text-2xl md:text-3xl font-semibold mb-2 text-slate-800">
@@ -368,6 +382,7 @@ const EventsPage: React.FC = () => {
                   name="registration_from"
                   value={formData.registration_from}
                   onChange={handleChange}
+                  min={todayDate}
                   className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50"
                 />
               </div>
@@ -380,6 +395,7 @@ const EventsPage: React.FC = () => {
                   name="registration_to"
                   value={formData.registration_to}
                   onChange={handleChange}
+                  min={formData.registration_from || todayDate}
                   className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50"
                 />
               </div>
@@ -413,6 +429,7 @@ const EventsPage: React.FC = () => {
                   name="event_from"
                   value={formData.event_from}
                   onChange={handleChange}
+                  min={todayDate}
                   className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50"
                 />
               </div>
@@ -425,6 +442,7 @@ const EventsPage: React.FC = () => {
                   name="event_to"
                   value={formData.event_to}
                   onChange={handleChange}
+                  min={formData.event_from || todayDate}
                   className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50"
                 />
               </div>
@@ -700,6 +718,7 @@ Men's Doubles Above 30: 14:00`}
         </div>
       </div>
     </div>
+    </>
   );
 };
 

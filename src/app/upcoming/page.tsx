@@ -69,6 +69,79 @@ const EventCard: React.FC<EventCardProps> = ({
   poster,
 }) => {
   const [showPosterModal, setShowPosterModal] = useState(false);
+  const [registrationError, setRegistrationError] = useState<string | null>(null);
+
+  // Check if registration is open
+  const isRegistrationOpen = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to start of day
+    
+    // Check if registration has started
+    if (regFrom) {
+      const regFromDate = new Date(regFrom);
+      regFromDate.setHours(0, 0, 0, 0);
+      if (today < regFromDate) {
+        return false; // Registration hasn't started yet
+      }
+    }
+    
+    // Check if registration has closed
+    if (regTo) {
+      const regToDate = new Date(regTo);
+      regToDate.setHours(23, 59, 59, 999); // End of day
+      if (today > regToDate) {
+        return false; // Registration has closed
+      }
+    }
+    
+    return true; // Registration is open
+  };
+
+  // Get registration status message
+  const getRegistrationStatus = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    if (regFrom) {
+      const regFromDate = new Date(regFrom);
+      regFromDate.setHours(0, 0, 0, 0);
+      if (today < regFromDate) {
+        return {
+          open: false,
+          message: `Registration opens on ${formatDate(regFrom)}`,
+          error: `Registration is not open yet. Registration will open on ${regFromDate.toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}.`
+        };
+      }
+    }
+    
+    if (regTo) {
+      const regToDate = new Date(regTo);
+      regToDate.setHours(23, 59, 59, 999);
+      if (today > regToDate) {
+        return {
+          open: false,
+          message: `Registration closed on ${formatDate(regTo)}`,
+          error: `Registration has closed. The registration period ended on ${regToDate.toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}.`
+        };
+      }
+    }
+    
+    return { open: true, message: "", error: "" };
+  };
+
+  // Handle registration button click
+  const handleRegisterClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const status = getRegistrationStatus();
+    if (!status.open) {
+      e.preventDefault();
+      setRegistrationError(status.error);
+      // Clear error after 5 seconds
+      setTimeout(() => setRegistrationError(null), 5000);
+      return false;
+    }
+    setRegistrationError(null);
+    return true;
+  };
   // Helper to format time
   const formatTime = (timeStr?: string) => {
     if (!timeStr) return "";
@@ -387,14 +460,45 @@ const EventCard: React.FC<EventCardProps> = ({
           </div>
         )}
 
+        {/* Registration Error Message */}
+        {registrationError && (
+          <div className="pt-4">
+            <div className="bg-red-50 border-l-4 border-red-500 rounded-lg p-4">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p className="text-red-700 font-medium text-sm">{registrationError}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Register Button */}
         <div className="pt-4">
-          <a
-            href={formUrl}
-            className="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center font-bold py-4 px-6 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl text-lg"
-          >
-            Register Now
-          </a>
+          {(() => {
+            const status = getRegistrationStatus();
+            return (
+              <>
+                <a
+                  href={formUrl}
+                  onClick={handleRegisterClick}
+                  className={`block w-full text-center font-bold py-4 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl text-lg ${
+                    status.open
+                      ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 cursor-pointer"
+                      : "bg-gray-400 text-gray-200 cursor-not-allowed"
+                  }`}
+                >
+                  {status.open ? "Register Now" : (regTo && new Date() > new Date(regTo) ? "Registration Closed" : "Registration Not Open Yet")}
+                </a>
+                {!status.open && status.message && (
+                  <p className="text-center text-sm text-gray-600 mt-2">
+                    {status.message}
+                  </p>
+                )}
+              </>
+            );
+          })()}
         </div>
       </div>
 
