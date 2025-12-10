@@ -1,8 +1,4 @@
 {
-<<<<<<< HEAD
-  "dependencies": {
-    "lucide-react": "^0.544.0"
-=======
   "name": "badminton",
   "version": "0.1.0",
   "private": true,
@@ -33,6 +29,5 @@
     "eslint-config-next": "15.5.3",
     "tailwindcss": "^4",
     "typescript": "^5"
->>>>>>> 63a92892b1330938303332fd829d747c4793a8f2
   }
 }
