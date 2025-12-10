@@ -2,13 +2,12 @@
 
 import React from "react";
 import Link from "next/link";
-// 👇 This import was missing
-import AdminNav from "@/components/AdminNav"; 
+
 
 export default function UserEntryCompleted() {
   return (
     <>
-      <AdminNav />
+  
       <div className="min-h-screen bg-gray-100 flex items-center justify-center py-8 px-4 pt-20 sm:pt-24">
         <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
           <div className="mb-6">
@@ -54,3 +53,4 @@ export default function UserEntryCompleted() {
     </>
   );
 }
+
