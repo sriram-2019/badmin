@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import AdminNav from "../../../component/AdminNav";
+import { useAuth } from "../../../component/useAuth";
 
 const API_URL = "http://localhost:8000/api/registrations/";
 
@@ -26,6 +27,7 @@ interface RegistrationData {
 }
 
 export default function DashboardPage() {
+  const { isAuthenticated, isLoading } = useAuth();
   const [showTable, setShowTable] = useState(false);
   const [registrations, setRegistrations] = useState<RegistrationData[]>([]);
   const [loadingRegistrations, setLoadingRegistrations] = useState(false);
@@ -34,8 +36,10 @@ export default function DashboardPage() {
   const [selectedEventId, setSelectedEventId] = useState<string>("");
   const [events, setEvents] = useState<any[]>([]);
 
-  // Fetch events for dropdown
+  // Fetch events for dropdown - only if authenticated
   useEffect(() => {
+    if (!isAuthenticated) return;
+    
     async function fetchEvents() {
       try {
         const res = await fetch("http://localhost:8000/api/events/");
@@ -48,7 +52,7 @@ export default function DashboardPage() {
       }
     }
     fetchEvents();
-  }, []);
+  }, [isAuthenticated]);
 
   async function fetchRegistrations() {
     try {
@@ -192,6 +196,22 @@ export default function DashboardPage() {
     }
   }
 
+  // Show loading or nothing while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if not authenticated (will redirect)
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <>
@@ -223,7 +243,7 @@ export default function DashboardPage() {
           </Link>
 
           {/* Card 2 – Completed */}
-          <Link href="/user_entry_completed" className="group">
+          <Link href="/admin-login/user_entry_completed" className="group">
             <div className="h-full rounded-xl sm:rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm hover:shadow-lg transition hover:-translate-y-1 cursor-pointer flex flex-col justify-between">
               <div>
                 <h2 className="text-lg sm:text-xl font-semibold text-slate-800 mb-2">Completed</h2>

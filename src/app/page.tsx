@@ -92,8 +92,29 @@ export default function Page() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="mt-10"
+            className="mt-10 relative"
           >
+            {/* Close Button - Fixed Position */}
+            <button
+              onClick={handleYoutubeToggle}
+              className="fixed top-24 right-6 z-[60] bg-red-600 hover:bg-red-700 text-white rounded-full p-3 shadow-2xl hover:scale-110 transition-all duration-300 flex items-center justify-center group border-2 border-white"
+              aria-label="Close YouTube"
+              title="Close YouTube"
+            >
+              <svg 
+                className="w-6 h-6" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2.5} 
+                  d="M6 18L18 6M6 6l12 12" 
+                />
+              </svg>
+            </button>
             <Youtube />
           </motion.div>
         )}
@@ -108,8 +129,29 @@ export default function Page() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="mt-10"
+            className="mt-10 relative"
           >
+            {/* Close Button - Fixed Position */}
+            <button
+              onClick={handleInstaToggle}
+              className="fixed top-24 right-6 z-[60] bg-red-600 hover:bg-red-700 text-white rounded-full p-3 shadow-2xl hover:scale-110 transition-all duration-300 flex items-center justify-center group border-2 border-white"
+              aria-label="Close Instagram"
+              title="Close Instagram"
+            >
+              <svg 
+                className="w-6 h-6" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2.5} 
+                  d="M6 18L18 6M6 6l12 12" 
+                />
+              </svg>
+            </button>
             <Insta />
           </motion.div>
         )}
@@ -272,55 +314,166 @@ function Achievements({
   onInstaClick: () => void;
 }) {
   return (
-    <section className="bg-gradient-to-b from-blue-50 via-blue-100 to-blue-200 py-16">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center px-6">
-        {/* Swiper Slider */}
-        <div className="relative w-full md:w-[500px] h-[250px] md:h-[300px] mx-auto overflow-hidden">
-          <Swiper
-            modules={[Autoplay, Pagination]}
-            autoplay={{ delay: 3000 }}
-            pagination={{ clickable: true }}
-            loop={true}
-            className="w-full h-full overflow-hidden shadow-xl rounded-lg"
+    <section className="bg-gradient-to-b from-gray-50 via-white to-gray-50 py-16">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center px-6">
+        {/* Modern Image Carousel */}
+        <motion.div 
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="relative w-full h-[350px] md:h-[400px] mx-auto group"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-pink-500/20 to-purple-500/20 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-500" />
+          <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white/50">
+            <Swiper
+              modules={[Autoplay, Pagination]}
+              autoplay={{ delay: 3500, disableOnInteraction: false }}
+              pagination={{ 
+                clickable: true,
+                bulletClass: 'swiper-pagination-bullet !bg-white/60 !w-3 !h-3',
+                bulletActiveClass: 'swiper-pagination-bullet-active !bg-pink-500 !w-8'
+              }}
+              loop={true}
+              className="w-full h-full"
+            >
+              <SwiperSlide>
+                <div className="relative w-full h-full">
+                  <Image
+                    src="/img/WhatsApp Image 2025-09-19 at 23.40.32_dfc68ea3.jpg"
+                    alt="Badminton Event 1"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                </div>
+              </SwiperSlide>
+              <SwiperSlide>
+                <div className="relative w-full h-full">
+                  <Image
+                    src="/img/WhatsApp Image 2025-09-19 at 23.40.31_63410364.jpg"
+                    alt="Badminton Event 2"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                </div>
+              </SwiperSlide>
+              <SwiperSlide>
+                <div className="relative w-full h-full">
+                  <Image
+                    src="/img/WhatsApp Image 2025-09-19 at 23.40.31_2648f40c.jpg"
+                    alt="Badminton Event 3"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                </div>
+              </SwiperSlide>
+            </Swiper>
+          </div>
+        </motion.div>
+
+        {/* Modern Event Buttons with Logo and Glitter */}
+        <motion.div 
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="space-y-5"
+        >
+          {/* Upcoming Event Button */}
+          <Link 
+            href="/upcoming"
+            className="group relative block overflow-hidden rounded-3xl shadow-2xl hover:shadow-pink-500/50 transition-all duration-500 hover:scale-[1.02]"
+            style={{ minHeight: '140px' }}
           >
-            <SwiperSlide>
-              <div className="rhombus-img">
-                <img
-                  src="/img/WhatsApp Image 2025-09-19 at 23.40.32_dfc68ea3.jpg"
-                  alt="Badminton 1"
+            {/* Glitter/Shine Effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-pink-400 via-purple-500 via-pink-500 to-purple-600 bg-[length:200%_200%] animate-gradient-shine opacity-90 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent" />
+            
+            {/* Glitter Overlay */}
+            <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-transparent via-white/30 to-transparent transform rotate-45 animate-shimmer" />
+            </div>
+            
+            <div className="relative p-6 md:p-8 flex items-center gap-4 md:gap-6">
+              {/* Logo/Icon */}
+              <div className="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl bg-white/25 backdrop-blur-sm flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 border-2 border-white/40">
+                <Image
+                  src="/img/logo.jpeg"
+                  alt="Logo"
+                  width={45}
+                  height={30}
+                  className="object-contain"
                 />
               </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="rhombus-img">
-                <img
-                  src="/img/WhatsApp Image 2025-09-19 at 23.40.31_63410364.jpg"
-                  alt="Badminton 2"
-                />
+              {/* Trophy Icon */}
+              <div className="absolute top-3 right-3 md:top-4 md:right-4 text-2xl md:text-3xl opacity-90 group-hover:opacity-100 group-hover:scale-125 group-hover:rotate-12 transition-all drop-shadow-lg">
+                🏆
               </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="rhombus-img">
-                <img
-                  src="/img/WhatsApp Image 2025-09-19 at 23.40.31_2648f40c.jpg"
-                  alt="Badminton 3"
-                />
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-extrabold text-white mb-1 md:mb-2 group-hover:translate-x-2 transition-transform drop-shadow-lg">
+                  Upcoming Event
+                </h3>
+                <p className="text-white/95 text-xs md:text-sm lg:text-base font-medium">
+                  Discover tournaments coming soon
+                </p>
               </div>
-            </SwiperSlide>
-          </Swiper>
-        </div>
-
-        {/* Achievement Buttons */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Link href="/upcoming" className="btn-upcoming">
-            🏆 Upcoming Event
+              {/* Arrow */}
+              <div className="text-white text-2xl md:text-3xl group-hover:translate-x-3 transition-transform drop-shadow-lg">
+                →
+              </div>
+            </div>
           </Link>
 
-          <Link href="/completed" className="btn-upcoming">
-            <span style={{ fontSize: "2rem", marginRight: "0.5rem" }}>✔️</span>
-            <span style={{ fontSize: "1.5rem" }}>Completed Events</span>
+          {/* Completed Events Button */}
+          <Link 
+            href="/completed"
+            className="group relative block overflow-hidden rounded-3xl shadow-2xl hover:shadow-blue-500/50 transition-all duration-500 hover:scale-[1.02]"
+            style={{ minHeight: '140px' }}
+          >
+            {/* Glitter/Shine Effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-indigo-600 via-blue-500 to-purple-600 bg-[length:200%_200%] animate-gradient-shine opacity-90 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent" />
+            
+            {/* Glitter Overlay */}
+            <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-transparent via-white/30 to-transparent transform rotate-45 animate-shimmer" />
+            </div>
+            
+            <div className="relative p-6 md:p-8 flex items-center gap-4 md:gap-6">
+              {/* Logo/Icon */}
+              <div className="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl bg-white/25 backdrop-blur-sm flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 border-2 border-white/40">
+                <Image
+                  src="/img/logo.jpeg"
+                  alt="Logo"
+                  width={45}
+                  height={30}
+                  className="object-contain"
+                />
+              </div>
+              {/* Checkmark Icon */}
+              <div className="absolute top-3 right-3 md:top-4 md:right-4 text-2xl md:text-3xl opacity-90 group-hover:opacity-100 group-hover:scale-125 group-hover:rotate-12 transition-all drop-shadow-lg">
+                ✓
+              </div>
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-extrabold text-white mb-1 md:mb-2 group-hover:translate-x-2 transition-transform drop-shadow-lg">
+                  Completed Events
+                </h3>
+                <p className="text-white/95 text-xs md:text-sm lg:text-base font-medium">
+                  Relive past tournaments & championships
+                </p>
+              </div>
+              {/* Arrow */}
+              <div className="text-white text-2xl md:text-3xl group-hover:translate-x-3 transition-transform drop-shadow-lg">
+                →
+              </div>
+            </div>
           </Link>
-        </div>
+        </motion.div>
       </div>
 
       {/* Stay Connected */}

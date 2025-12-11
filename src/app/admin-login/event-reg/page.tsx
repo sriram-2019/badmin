@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import AdminNav from "../../../component/AdminNav";
+import { useAuth } from "../../../component/useAuth";
 
 interface EventFormData {
   event_name: string;
@@ -47,6 +48,8 @@ interface Event {
 }
 
 const EventsPage: React.FC = () => {
+  const { isAuthenticated, isLoading } = useAuth();
+
   // Get today's date in YYYY-MM-DD format for date input min attribute
   const getTodayDate = () => {
     const today = new Date();
@@ -86,8 +89,10 @@ const EventsPage: React.FC = () => {
   const [posterFile, setPosterFile] = useState<File | null>(null);
   const [posterPreview, setPosterPreview] = useState<string | null>(null);
 
-  // Fetch previous events from database on component mount
+  // Fetch previous events from database on component mount - only if authenticated
   useEffect(() => {
+    if (!isAuthenticated) return;
+    
     const fetchEvents = async () => {
       try {
         setIsLoadingEvents(true);
@@ -117,7 +122,7 @@ const EventsPage: React.FC = () => {
     };
 
     fetchEvents();
-  }, []);
+  }, [isAuthenticated]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -329,6 +334,23 @@ const EventsPage: React.FC = () => {
       setIsSubmitting(false);
     }
   };
+
+  // Show loading or nothing while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if not authenticated (will redirect)
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <>
