@@ -18,41 +18,43 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [visibleEvents, setVisibleEvents] = useState(6);
 
-  // Fetch completed events from database
+  // Fetch completed events from database with caching
   useEffect(() => {
+    let isMounted = true;
+    const abortController = new AbortController();
+
     async function fetchCompletedEvents() {
       try {
         setIsLoading(true);
-        const response = await fetch("https://backendbadminton.pythonanywhere.com/api/completed-events/");
         
-        if (!response.ok) {
-          throw new Error("Failed to fetch completed events");
-        }
+        // Use optimized fetch with caching
+        const { fetchCompletedEvents: fetchEvents } = await import('@/lib/api');
+        const data = await fetchEvents();
         
-        const data = await response.json();
+        if (!isMounted) return;
+        
         console.log("Fetched completed events:", data);
-        if (data.length > 0) {
-          console.log("First event:", {
-            id: data[0].id,
-            name: data[0].event_name,
-            hasPoster: !!data[0].poster,
-            posterType: typeof data[0].poster,
-            posterLength: data[0].poster?.length || 0,
-            posterPreview: data[0].poster?.substring(0, 60) || 'None'
-          });
-        }
         setEvents(data);
         setError(null);
       } catch (err: any) {
+        if (!isMounted) return;
         console.error("Error fetching completed events:", err);
         setError(err.message || "Failed to load completed events");
         setEvents([]);
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     }
 
     fetchCompletedEvents();
+
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
   }, []);
 
   // Format date for display
@@ -151,10 +153,11 @@ function App() {
                           src={event.poster.startsWith('data:') ? event.poster : `data:image/jpeg;base64,${event.poster}`}
                           alt={event.event_name}
                           className="w-full h-full object-contain absolute inset-0"
+                          loading="lazy"
+                          decoding="async"
                           onLoad={() => console.log("Image loaded successfully for:", event.event_name)}
                           onError={(e) => {
                             console.error("Image load error for event:", event.event_name);
-                            console.error("Poster data preview:", event.poster?.substring(0, 100));
                             const target = e.currentTarget;
                             target.style.display = 'none';
                             const fallback = target.nextElementSibling as HTMLElement;

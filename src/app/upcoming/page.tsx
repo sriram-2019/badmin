@@ -595,18 +595,20 @@ const UpcomingEvents: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+    const abortController = new AbortController();
+
     const fetchEvents = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const response = await fetch("https://backendbadminton.pythonanywhere.com/api/events/?upcoming=true");
+        // Use optimized fetch with caching
+        const { fetchUpcomingEvents } = await import('@/lib/api');
+        const data = await fetchUpcomingEvents();
+        
+        if (!isMounted) return;
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch events");
-        }
-
-        const data = await response.json();
         const eventsList = Array.isArray(data) ? data : [data];
         
         if (eventsList.length === 0) {
@@ -618,14 +620,23 @@ const UpcomingEvents: React.FC = () => {
         const eventData = eventsList[0];
         setEvent(eventData);
       } catch (err: any) {
+        if (!isMounted) return;
         setError(err.message || "Something went wrong");
         console.error("Error fetching events:", err);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchEvents();
+
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
   }, []);
 
   if (loading) {
