@@ -51,9 +51,9 @@ export interface UpcomingEvent {
   created_at?: string;
 }
 
-// Simple in-memory cache with 5 minute TTL
+// Simple in-memory cache with 10 minute TTL (increased for better performance)
 const cache = new Map<string, CacheEntry>();
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 
 // Base API URL
 const BASE_URL = 'https://backendbadminton.pythonanywhere.com/api';

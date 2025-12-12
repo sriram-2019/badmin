@@ -19,14 +19,21 @@ function App() {
     async function fetchCompletedEvents() {
       try {
         setIsLoading(true);
+        setError(null);
         
         // Use optimized fetch with caching
         const { fetchCompletedEvents: fetchEvents } = await import('@/lib/api');
-        const data = await fetchEvents();
+        
+        // Start fetching in the background
+        const dataPromise = fetchEvents();
+        
+        // Show skeleton immediately, don't block UI
+        if (!isMounted) return;
+        
+        const data = await dataPromise;
         
         if (!isMounted) return;
         
-        console.log("Fetched completed events:", data);
         setEvents(data);
         setError(null);
       } catch (err: any) {
@@ -73,32 +80,22 @@ function App() {
 
   const hasMoreEvents = visibleEvents < events.length;
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-100 via-white to-blue-100 text-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-pink-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading completed events...</p>
-        </div>
+  // Skeleton loader component
+  const EventSkeleton = () => (
+    <div className="bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
+      <div className="relative h-96 bg-gray-200"></div>
+      <div className="p-6 space-y-4">
+        <div className="h-6 bg-gray-200 rounded w-3/4"></div>
+        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+        <div className="h-10 bg-gray-200 rounded"></div>
       </div>
-    );
-  }
+    </div>
+  );
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-100 via-white to-blue-100 text-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">Error: {error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600"
-          >
-            Retry
-          </button>
-        </div>
-      </div>
-    );
-  }
+  // Retry function
+  const retryFetch = () => {
+    window.location.reload();
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 via-white to-blue-100 text-gray-900">
@@ -109,7 +106,7 @@ function App() {
         </h1>
 
         {/* Search Bar */}
-        {events.length > 0 && (
+        {!isLoading && events.length > 0 && (
           <div className="relative max-w-md mx-auto mb-6">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
@@ -123,15 +120,37 @@ function App() {
           </div>
         )}
 
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-center">
+            <p className="text-red-600 mb-3">Error: {error}</p>
+            <button
+              onClick={retryFetch}
+              className="bg-pink-500 text-white px-6 py-2 rounded-lg hover:bg-pink-600 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        )}
+
+        {/* Loading Skeleton */}
+        {isLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, i) => (
+              <EventSkeleton key={i} />
+            ))}
+          </div>
+        )}
+
         {/* Events Grid */}
-        {events.length === 0 ? (
+        {!isLoading && !error && events.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-gray-500 text-lg">No completed events found.</p>
             <p className="text-gray-400 text-sm mt-2">
               Completed events will appear here once they are added.
             </p>
           </div>
-        ) : (
+        ) : !isLoading && (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredEvents.map((event) => (
@@ -145,12 +164,14 @@ function App() {
                         <img
                           src={event.poster.startsWith('data:') ? event.poster : `data:image/jpeg;base64,${event.poster}`}
                           alt={event.event_name}
-                          className="w-full h-full object-contain absolute inset-0"
+                          className="w-full h-full object-contain absolute inset-0 transition-opacity duration-300"
                           loading="lazy"
                           decoding="async"
-                          onLoad={() => console.log("Image loaded successfully for:", event.event_name)}
+                          fetchPriority="low"
+                          onLoad={(e) => {
+                            e.currentTarget.style.opacity = '1';
+                          }}
                           onError={(e) => {
-                            console.error("Image load error for event:", event.event_name);
                             const target = e.currentTarget;
                             target.style.display = 'none';
                             const fallback = target.nextElementSibling as HTMLElement;
@@ -159,6 +180,7 @@ function App() {
                               fallback.classList.remove('hidden');
                             }
                           }}
+                          style={{ opacity: 0 }}
                         />
                         <div className="hidden w-full h-96 bg-gradient-to-br from-gray-200 to-gray-300 items-center justify-center absolute inset-0">
                           <p className="text-gray-400 text-sm">Failed to load image</p>
