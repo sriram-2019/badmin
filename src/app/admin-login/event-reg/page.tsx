@@ -96,15 +96,8 @@ const EventsPage: React.FC = () => {
     const fetchEvents = async () => {
       try {
         setIsLoadingEvents(true);
-        const response = await fetch("https://backendbadminton.pythonanywhere.com/api/events/");
-        
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error("API Error Response:", errorText);
-          throw new Error(`Failed to fetch events: ${response.status} ${response.statusText}`);
-        }
-        
-        const data = await response.json();
+        const { fetchEvents } = await import('@/lib/api');
+        const data = await fetchEvents();
         // API returns an array of events
         const eventsList = Array.isArray(data) ? data : [data];
         setEvents(eventsList);
@@ -295,13 +288,14 @@ const EventsPage: React.FC = () => {
       const newEvent: Event = await response.json();
 
       // Refresh events list from database to include the newly created event
-      // This ensures we have the latest data from the database
-      const refreshResponse = await fetch("https://backendbadminton.pythonanywhere.com/api/events/");
-      if (refreshResponse.ok) {
-        const refreshedData = await refreshResponse.json();
+      // This ensures we have the latest data from the database (optimized)
+      const { fetchEvents, clearCache } = await import('@/lib/api');
+      clearCache('/events/'); // Clear cache to get fresh data
+      try {
+        const refreshedData = await fetchEvents();
         const eventsList = Array.isArray(refreshedData) ? refreshedData : [refreshedData];
         setEvents(eventsList);
-      } else {
+      } catch {
         // Fallback: add new event to existing list if refresh fails
         setEvents(prev => [newEvent, ...prev]);
       }

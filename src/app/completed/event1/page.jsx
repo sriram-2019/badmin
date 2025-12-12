@@ -26,13 +26,8 @@ export default function EventResultsPage() {
     async function fetchEventResults() {
       try {
         setIsLoading(true);
-        const response = await fetch("https://backendbadminton.pythonanywhere.com/api/event-results/");
-        
-        if (!response.ok) {
-          throw new Error("Failed to fetch event results");
-        }
-        
-        const data = await response.json();
+        const { fetchEventResults } = await import('@/lib/api');
+        const data = await fetchEventResults();
         setEventResults(data);
         setError(null);
       } catch (err: any) {

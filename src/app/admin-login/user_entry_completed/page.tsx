@@ -98,6 +98,10 @@ export default function UserEntryCompleted() {
       const result = await response.json();
       console.log("Event created successfully:", result);
       
+      // Clear cache for completed events to show new data
+      const { clearCache } = await import('@/lib/api');
+      clearCache('/completed-events/');
+      
       // Store event data before resetting
       const eventName = formData.event_name;
       const eventDate = formData.event_conducted_date;

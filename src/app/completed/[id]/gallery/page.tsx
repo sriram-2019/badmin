@@ -3,27 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-
-interface CompletedEvent {
-  id: number;
-  event_name: string;
-  event_conducted_date: string;
-  poster: string | null;
-  created_at: string;
-}
-
-interface EventResult {
-  id: number;
-  event_name: string;
-  event_date: string;
-  winner: string;
-  images: Array<{
-    id: number;
-    image: string;
-    image_order: number;
-  }>;
-  created_at: string;
-}
+import { CompletedEvent, EventResult } from "@/lib/api";
 
 export default function GalleryPage() {
   const params = useParams();
@@ -43,12 +23,13 @@ export default function GalleryPage() {
       try {
         setIsLoading(true);
         
-        // Fetch all completed events to find the one with matching ID
-        const completedResponse = await fetch("https://backendbadminton.pythonanywhere.com/api/completed-events/");
-        if (!completedResponse.ok) {
-          throw new Error("Failed to fetch completed events");
-        }
-        const completedEvents = await completedResponse.json();
+        // Fetch all completed events and event results in parallel (optimized)
+        const { fetchCompletedEvents, fetchEventResults } = await import('@/lib/api');
+        const [completedEvents, allResults] = await Promise.all([
+          fetchCompletedEvents(),
+          fetchEventResults(),
+        ]);
+        
         const event = completedEvents.find((e: CompletedEvent) => e.id === parseInt(eventId));
         
         if (!event) {
@@ -56,13 +37,6 @@ export default function GalleryPage() {
         }
         
         setCompletedEvent(event);
-
-        // Fetch all event results and filter by event name
-        const resultsResponse = await fetch("https://backendbadminton.pythonanywhere.com/api/event-results/");
-        if (!resultsResponse.ok) {
-          throw new Error("Failed to fetch event results");
-        }
-        const allResults = await resultsResponse.json();
         
         // Filter results that match the event name EXACTLY (case-insensitive, strict matching)
         // Only show images for the specific event that was clicked

@@ -142,6 +142,10 @@ function EventResultsContent() {
       const result = await response.json();
       setSuccess("Event results saved successfully!");
       
+      // Clear cache for event results to show new data
+      const { clearCache } = await import('@/lib/api');
+      clearCache('/event-results/');
+      
       // Reset form but keep event name if it came from URL
       if (isEventNameFromUrl) {
         // Keep the event name and date from URL

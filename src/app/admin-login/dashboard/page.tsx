@@ -42,11 +42,9 @@ export default function DashboardPage() {
     
     async function fetchEvents() {
       try {
-        const res = await fetch("https://backendbadminton.pythonanywhere.com/api/events/");
-        if (res.ok) {
-          const data = await res.json();
-          setEvents(Array.isArray(data) ? data : [data]);
-        }
+        const { fetchEvents } = await import('@/lib/api');
+        const data = await fetchEvents();
+        setEvents(Array.isArray(data) ? data : [data]);
       } catch (err) {
         console.error("Failed to fetch events:", err);
       }
