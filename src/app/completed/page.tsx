@@ -162,7 +162,13 @@ function App() {
                     {event.poster ? (
                       <>
                         <img
-                          src={event.poster.startsWith('data:') ? event.poster : `data:image/jpeg;base64,${event.poster}`}
+                          src={
+                            event.poster.startsWith('http') || event.poster.startsWith('/')
+                              ? event.poster // URL format
+                              : event.poster.startsWith('data:')
+                              ? event.poster // Base64 with data URI
+                              : `data:image/jpeg;base64,${event.poster}` // Base64 without prefix
+                          }
                           alt={event.event_name}
                           className="w-full h-full object-contain absolute inset-0 transition-opacity duration-300"
                           loading="lazy"
