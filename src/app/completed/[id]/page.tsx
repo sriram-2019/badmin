@@ -4,27 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import confetti from "canvas-confetti";
-
-interface CompletedEvent {
-  id: number;
-  event_name: string;
-  event_conducted_date: string;
-  poster: string | null;
-  created_at: string;
-}
-
-interface EventResult {
-  id: number;
-  event_name: string;
-  event_date: string;
-  winner: string;
-  images: Array<{
-    id: number;
-    image: string;
-    image_order: number;
-  }>;
-  created_at: string;
-}
+import { CompletedEvent, EventResult } from "@/lib/api";
 
 export default function EventDetailPage() {
   const params = useParams();

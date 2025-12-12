@@ -5,6 +5,52 @@ interface CacheEntry {
   timestamp: number;
 }
 
+// API Response Types
+export interface CompletedEvent {
+  id: number;
+  event_name: string;
+  event_conducted_date: string;
+  poster: string | null;
+  created_at: string;
+}
+
+export interface EventResult {
+  id: number;
+  event_name: string;
+  event_date: string;
+  winner: string;
+  images: Array<{
+    id: number;
+    image: string;
+    image_order: number;
+  }>;
+  created_at: string;
+}
+
+export interface UpcomingEvent {
+  id: number | string;
+  event_name: string;
+  registration_from: string;
+  registration_to: string;
+  registration_deadline_time?: string | null;
+  event_from: string;
+  event_to?: string | null;
+  event_time?: string | null;
+  event_place: string;
+  age_limit?: string;
+  categories?: string;
+  category_times?: string;
+  entry_fee?: string | number | null;
+  winner_prize?: string;
+  runner_prize?: string;
+  semifinalist_prize?: string;
+  other_awards?: string;
+  rules?: string;
+  poster?: string | null;
+  description?: string;
+  created_at?: string;
+}
+
 // Simple in-memory cache with 5 minute TTL
 const cache = new Map<string, CacheEntry>();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
@@ -89,28 +135,28 @@ export function clearCache(endpoint?: string) {
 /**
  * Fetch completed events with caching
  */
-export async function fetchCompletedEvents() {
-  return fetchWithCache('/completed-events/');
+export async function fetchCompletedEvents(): Promise<CompletedEvent[]> {
+  return fetchWithCache<CompletedEvent[]>('/completed-events/');
 }
 
 /**
  * Fetch upcoming events with caching
  */
-export async function fetchUpcomingEvents() {
-  return fetchWithCache('/events/?upcoming=true');
+export async function fetchUpcomingEvents(): Promise<UpcomingEvent[]> {
+  return fetchWithCache<UpcomingEvent[]>('/events/?upcoming=true');
 }
 
 /**
  * Fetch event results with caching
  */
-export async function fetchEventResults() {
-  return fetchWithCache('/event-results/');
+export async function fetchEventResults(): Promise<EventResult[]> {
+  return fetchWithCache<EventResult[]>('/event-results/');
 }
 
 /**
  * Fetch single completed event
  */
-export async function fetchCompletedEvent(id: number) {
-  return fetchWithCache(`/completed-events/${id}/`);
+export async function fetchCompletedEvent(id: number): Promise<CompletedEvent> {
+  return fetchWithCache<CompletedEvent>(`/completed-events/${id}/`);
 }
 

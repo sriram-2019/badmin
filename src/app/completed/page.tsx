@@ -2,14 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Search, Filter } from "lucide-react";
 import Link from "next/link";
-
-interface CompletedEvent {
-  id: number;
-  event_name: string;
-  event_conducted_date: string;
-  poster: string | null;
-  created_at: string;
-}
+import { CompletedEvent } from "@/lib/api";
 
 function App() {
   const [events, setEvents] = useState<CompletedEvent[]>([]);
