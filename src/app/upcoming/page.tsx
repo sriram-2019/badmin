@@ -600,7 +600,7 @@ const UpcomingEvents: React.FC = () => {
         setLoading(true);
         setError(null);
 
-        const response = await fetch("http://localhost:8000/api/events/?upcoming=true");
+        const response = await fetch("https://backendbadminton.pythonanywhere.com/api/events/?upcoming=true");
 
         if (!response.ok) {
           throw new Error("Failed to fetch events");

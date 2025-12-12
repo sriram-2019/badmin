@@ -23,7 +23,7 @@ function App() {
     async function fetchCompletedEvents() {
       try {
         setIsLoading(true);
-        const response = await fetch("http://localhost:8000/api/completed-events/");
+        const response = await fetch("https://backendbadminton.pythonanywhere.com/api/completed-events/");
         
         if (!response.ok) {
           throw new Error("Failed to fetch completed events");

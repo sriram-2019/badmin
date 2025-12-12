@@ -96,7 +96,7 @@ const EventsPage: React.FC = () => {
     const fetchEvents = async () => {
       try {
         setIsLoadingEvents(true);
-        const response = await fetch("http://localhost:8000/api/events/");
+        const response = await fetch("https://backendbadminton.pythonanywhere.com/api/events/");
         
         if (!response.ok) {
           const errorText = await response.text();
@@ -112,7 +112,7 @@ const EventsPage: React.FC = () => {
         console.error("Error fetching events:", err);
         // Show error to user if it's a network error
         if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
-          setError("Cannot connect to server. Make sure Django is running on http://localhost:8000");
+          setError("Cannot connect to server. Make sure Django is running on https://backendbadminton.pythonanywhere.com");
         } else {
           setError(`Error loading events: ${err.message}`);
         }
@@ -280,7 +280,7 @@ const EventsPage: React.FC = () => {
       }
 
       // Adjust URL to match your Django REST API
-      const response = await fetch("http://localhost:8000/api/events/", {
+      const response = await fetch("https://backendbadminton.pythonanywhere.com/api/events/", {
         method: "POST",
         body: formDataToSend, // Don't set Content-Type header, browser will set it with boundary
       });
@@ -296,7 +296,7 @@ const EventsPage: React.FC = () => {
 
       // Refresh events list from database to include the newly created event
       // This ensures we have the latest data from the database
-      const refreshResponse = await fetch("http://localhost:8000/api/events/");
+      const refreshResponse = await fetch("https://backendbadminton.pythonanywhere.com/api/events/");
       if (refreshResponse.ok) {
         const refreshedData = await refreshResponse.json();
         const eventsList = Array.isArray(refreshedData) ? refreshedData : [refreshedData];

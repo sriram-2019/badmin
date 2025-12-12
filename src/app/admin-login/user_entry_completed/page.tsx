@@ -85,7 +85,7 @@ export default function UserEntryCompleted() {
       submitData.append("event_conducted_date", formData.event_conducted_date);
       submitData.append("poster", posterFile);
 
-      const response = await fetch("http://localhost:8000/api/completed-events/", {
+      const response = await fetch("https://backendbadminton.pythonanywhere.com/api/completed-events/", {
         method: "POST",
         body: submitData,
       });

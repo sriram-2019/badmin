@@ -44,7 +44,7 @@ export default function GalleryPage() {
         setIsLoading(true);
         
         // Fetch all completed events to find the one with matching ID
-        const completedResponse = await fetch("http://localhost:8000/api/completed-events/");
+        const completedResponse = await fetch("https://backendbadminton.pythonanywhere.com/api/completed-events/");
         if (!completedResponse.ok) {
           throw new Error("Failed to fetch completed events");
         }
@@ -58,7 +58,7 @@ export default function GalleryPage() {
         setCompletedEvent(event);
 
         // Fetch all event results and filter by event name
-        const resultsResponse = await fetch("http://localhost:8000/api/event-results/");
+        const resultsResponse = await fetch("https://backendbadminton.pythonanywhere.com/api/event-results/");
         if (!resultsResponse.ok) {
           throw new Error("Failed to fetch event results");
         }
