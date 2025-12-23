@@ -9,7 +9,7 @@ import { CompletedEvent, EventResult } from "@/lib/api";
 export default function EventDetailPage() {
   const params = useParams();
   const eventId = params?.id as string;
-  
+
   const [completedEvent, setCompletedEvent] = useState<CompletedEvent | null>(null);
   const [eventResults, setEventResults] = useState<EventResult[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,7 +18,7 @@ export default function EventDetailPage() {
   // Enhanced firecracker animation on page load
   useEffect(() => {
     if (isLoading) return;
-    
+
     // Multiple bursts of firecrackers
     const fireFirecrackers = () => {
       // Initial big burst
@@ -71,7 +71,7 @@ export default function EventDetailPage() {
       const interval = setInterval(() => {
         const randomX = Math.random();
         const randomY = Math.random() * 0.5 + 0.2;
-        
+
         confetti({
           particleCount: 30,
           spread: 45,
@@ -98,31 +98,31 @@ export default function EventDetailPage() {
 
       try {
         setIsLoading(true);
-        
+
         // Fetch all completed events to find the one with matching ID (with caching)
         const { fetchCompletedEvents, fetchEventResults } = await import('@/lib/api');
         const completedEvents = await fetchCompletedEvents();
         const event = completedEvents.find((e: CompletedEvent) => e.id === parseInt(eventId));
-        
+
         if (!event) {
           throw new Error("Event not found");
         }
-        
+
         setCompletedEvent(event);
 
         // Fetch all event results and filter by event name (with caching)
         const allResults = await fetchEventResults();
-        
+
         // Filter results that match the event name EXACTLY (case-insensitive, strict matching)
         // Only show images for the specific event that was clicked
         const normalizeName = (name: string) => name.toLowerCase().trim();
         const eventNameNormalized = normalizeName(event.event_name);
-        
+
         const matchingResults = allResults.filter((result: EventResult) => {
           const resultNameNormalized = normalizeName(result.event_name);
           return resultNameNormalized === eventNameNormalized;
         });
-        
+
         setEventResults(matchingResults);
         setError(null);
       } catch (err: any) {
@@ -248,7 +248,7 @@ export default function EventDetailPage() {
             <div className="relative">
               {/* Glowing outer ring */}
               <div className="absolute -inset-0.5 sm:-inset-1 bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 rounded-2xl sm:rounded-3xl blur-xl opacity-75 animate-pulse"></div>
-              
+
               {/* Main card */}
               <div className="relative bg-gradient-to-br from-yellow-400 via-orange-500 to-pink-500 rounded-2xl sm:rounded-3xl shadow-2xl p-0.5 sm:p-1">
                 <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16">
@@ -265,28 +265,43 @@ export default function EventDetailPage() {
                         </div>
                       </div>
                     </div>
-                    
+
                     {/* Winner Label - Animated - Responsive */}
                     <div className="mb-4 sm:mb-6 animate-fade-in-delay px-2">
-                      <span className="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-xs sm:text-sm md:text-lg font-black px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full uppercase tracking-wider sm:tracking-widest shadow-lg transform hover:scale-105 transition-transform">
+                      <span className="inline-block bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-600 text-black text-xs sm:text-sm md:text-lg font-black px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full uppercase tracking-wider sm:tracking-widest shadow-lg transform hover:scale-105 transition-transform">
                         🏆 CHAMPION 🏆
                       </span>
                     </div>
-                    
-                    {/* Winner Name - Epic Typography - Responsive */}
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-white to-yellow-300 mb-4 sm:mb-6 md:mb-8 animate-slide-up-delay drop-shadow-2xl px-2 break-words leading-tight">
+
+                    <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#d4af37] via-[#fff7ad] to-[#b8860b] mb-4 sm:mb-6 md:mb-8 animate-shimmer drop-shadow-[0_0_20px_rgba(255,215,0,0.5)] px-2 break-words leading-tight relative inline-block">
                       {eventResults[0].winner}
+                      {/* Glittering Sparkles Overlay */}
+                      <div className="absolute inset-0 pointer-events-none">
+                        {[...Array(10)].map((_, i) => (
+                          <div
+                            key={i}
+                            className="absolute w-1 h-1 bg-white rounded-full animate-glitter-sparkle"
+                            style={{
+                              left: `${Math.random() * 100}%`,
+                              top: `${Math.random() * 100}%`,
+                              animationDelay: `${Math.random() * 2}s`,
+                              animationDuration: `${0.7 + Math.random() * 1.3}s`
+                            }}
+                          />
+                        ))}
+                      </div>
                     </h2>
-                    
+
+
                     {/* Animated Decorative Line - Responsive */}
                     <div className="flex items-center justify-center gap-2 sm:gap-4 mb-6 sm:mb-8 md:mb-10 animate-fade-in-delay px-4">
-                      <div className="h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-yellow-400 to-yellow-400 flex-1 max-w-20 sm:max-w-32 md:max-w-40 rounded-full"></div>
-                      <div className="w-2 h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 bg-yellow-400 rounded-full animate-pulse shadow-lg"></div>
-                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-orange-400 rounded-full animate-ping"></div>
-                      <div className="w-2 h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 bg-yellow-400 rounded-full animate-pulse shadow-lg"></div>
-                      <div className="h-0.5 sm:h-1 bg-gradient-to-l from-transparent via-yellow-400 to-yellow-400 flex-1 max-w-20 sm:max-w-32 md:max-w-40 rounded-full"></div>
+                      <div className="h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-amber-400 to-amber-400 flex-1 max-w-20 sm:max-w-32 md:max-w-40 rounded-full"></div>
+                      <div className="w-2 h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 bg-amber-400 rounded-full animate-pulse shadow-lg"></div>
+                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-400 rounded-full animate-ping"></div>
+                      <div className="w-2 h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 bg-amber-400 rounded-full animate-pulse shadow-lg"></div>
+                      <div className="h-0.5 sm:h-1 bg-gradient-to-l from-transparent via-amber-400 to-amber-400 flex-1 max-w-20 sm:max-w-32 md:max-w-40 rounded-full"></div>
                     </div>
-                    
+
                     {/* Event Date - Styled - Responsive */}
                     <div className="flex items-center justify-center gap-2 sm:gap-3 text-white/80 text-sm sm:text-base md:text-lg px-4">
                       <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -374,7 +389,7 @@ export default function EventDetailPage() {
                         <p className="text-xs sm:text-sm text-white/60 font-semibold">Result #{index + 1}</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 md:gap-8 text-white/90">
                       <div className="flex items-center gap-2 sm:gap-3">
                         <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -441,6 +456,26 @@ export default function EventDetailPage() {
           }
         }
         
+        @keyframes shimmer {
+          0% { background-position: 0% center; }
+          100% { background-position: 200% center; }
+        }
+
+        @keyframes glitter-sparkle {
+          0%, 100% { transform: scale(0); opacity: 0; }
+          50% { transform: scale(1.5) rotate(45deg); opacity: 1; filter: blur(1px); }
+        }
+        
+        .animate-shimmer {
+          background-size: 200% auto;
+          animation: shimmer 3s linear infinite;
+        }
+
+        .animate-glitter-sparkle {
+          animation: glitter-sparkle ease-in-out infinite;
+          box-shadow: 0 0 10px 2px white;
+        }
+
         .animate-fade-in {
           animation: fade-in 0.8s ease-out;
         }
