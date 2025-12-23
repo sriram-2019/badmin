@@ -48,33 +48,31 @@ export default function Page() {
 
   return (
     <>
-      <Navbar />
-
       {/* Hero Section */}
-    <section className="relative h-[85vh] w-full mt-[64px]">
-  <Image
-    src={heroImage}
-    alt="Badminton hero banner"
-    fill
-    priority
-    className="object-cover object-center"
-  />
+      <section className="relative h-[85vh] w-full">
+        <Image
+          src={heroImage}
+          alt="Badminton hero banner"
+          fill
+          priority
+          className="object-cover object-center"
+        />
 
-  <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/40" />
 
-  <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-  <h1 className="text-4xl md:text-7xl font-bold text-white leading-tight drop-shadow-2xl uppercase">
-    Smash Your Limits
-    <span className="block text-pink-400">With Every Serve & Every Smash</span>
-  </h1>
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
+          <h1 className="text-4xl md:text-7xl font-bold text-white leading-tight drop-shadow-2xl uppercase">
+            Smash Your Limits
+            <span className="block text-pink-400">With Every Serve & Every Smash</span>
+          </h1>
 
-  <p className="text-lg md:text-2xl mt-8 text-white/80 font-light">
-    Champions rise here — join us and feel the thrill of true competition.
-  </p>
-</div>
+          <p className="text-lg md:text-2xl mt-8 text-white/80 font-light">
+            Champions rise here — join us and feel the thrill of true competition.
+          </p>
+        </div>
 
 
-</section>
+      </section>
 
 
       {/* Achievements Section */}
@@ -101,17 +99,17 @@ export default function Page() {
               aria-label="Close YouTube"
               title="Close YouTube"
             >
-              <svg 
-                className="w-6 h-6" 
-                fill="none" 
-                stroke="currentColor" 
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2.5} 
-                  d="M6 18L18 6M6 6l12 12" 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
             </button>
@@ -138,17 +136,17 @@ export default function Page() {
               aria-label="Close Instagram"
               title="Close Instagram"
             >
-              <svg 
-                className="w-6 h-6" 
-                fill="none" 
-                stroke="currentColor" 
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2.5} 
-                  d="M6 18L18 6M6 6l12 12" 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
             </button>
@@ -163,17 +161,17 @@ export default function Page() {
         className="fixed bottom-6 right-6 z-40 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-2xl hover:shadow-indigo-500/50 transition-all duration-300 hover:scale-110 group"
         title="Admin Login"
       >
-        <svg 
-          className="w-6 h-6" 
-          fill="none" 
-          stroke="currentColor" 
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth={2} 
-            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" 
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
           />
         </svg>
         <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
@@ -189,7 +187,7 @@ function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-black text-white z-50 shadow-lg">
+    <nav className="fixed top-0 left-0 w-full h-16 bg-black text-white z-50 shadow-lg border-b border-white/5">
       <div className="w-full flex items-center justify-between p-4">
         {/* Logo */}
         <div className="flex items-center space-x-3">
@@ -201,9 +199,9 @@ function Navbar() {
             className="object-contain"
           />
           <div className="leading-tight">
-           <span className={`font-bold text-2xl ${agbalumo.className}`}>
-  ASA <span className="text-sm text-pink-400">Associates</span>
-</span>
+            <span className={`font-bold text-2xl ${agbalumo.className}`}>
+              ASA <span className="text-sm text-pink-400">Associates</span>
+            </span>
 
 
           </div>
@@ -227,8 +225,8 @@ function Navbar() {
             </Link>
           </li>
           <li>
-            <Link 
-              href="/admin-login" 
+            <Link
+              href="/admin-login"
               className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg"
             >
               🔐 Admin
@@ -314,10 +312,10 @@ function Achievements({
   onInstaClick: () => void;
 }) {
   return (
-    <section className="bg-gradient-to-b from-gray-50 via-white to-gray-50 py-16">
+    <section className="bg-gradient-to-b from-slate-900 via-purple-900 to-slate-900 py-16">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center px-6">
         {/* Modern Image Carousel */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -329,7 +327,7 @@ function Achievements({
             <Swiper
               modules={[Autoplay, Pagination]}
               autoplay={{ delay: 3500, disableOnInteraction: false }}
-              pagination={{ 
+              pagination={{
                 clickable: true,
                 bulletClass: 'swiper-pagination-bullet !bg-white/60 !w-3 !h-3',
                 bulletActiveClass: 'swiper-pagination-bullet-active !bg-pink-500 !w-8'
@@ -375,7 +373,7 @@ function Achievements({
         </motion.div>
 
         {/* Modern Event Buttons with Logo and Glitter */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -383,7 +381,7 @@ function Achievements({
           className="space-y-5"
         >
           {/* Upcoming Event Button */}
-          <Link 
+          <Link
             href="/upcoming"
             className="group relative block overflow-hidden rounded-3xl shadow-2xl hover:shadow-pink-500/50 transition-all duration-500 hover:scale-[1.02]"
             style={{ minHeight: '140px' }}
@@ -391,12 +389,12 @@ function Achievements({
             {/* Glitter/Shine Effect */}
             <div className="absolute inset-0 bg-gradient-to-br from-pink-400 via-purple-500 via-pink-500 to-purple-600 bg-[length:200%_200%] animate-gradient-shine opacity-90 group-hover:opacity-100 transition-opacity" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent" />
-            
+
             {/* Glitter Overlay */}
             <div className="absolute inset-0 overflow-hidden">
               <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-transparent via-white/30 to-transparent transform rotate-45 animate-shimmer" />
             </div>
-            
+
             <div className="relative p-6 md:p-8 flex items-center gap-4 md:gap-6">
               {/* Logo/Icon */}
               <div className="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl bg-white/25 backdrop-blur-sm flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 border-2 border-white/40">
@@ -429,7 +427,7 @@ function Achievements({
           </Link>
 
           {/* Completed Events Button */}
-          <Link 
+          <Link
             href="/completed"
             className="group relative block overflow-hidden rounded-3xl shadow-2xl hover:shadow-blue-500/50 transition-all duration-500 hover:scale-[1.02]"
             style={{ minHeight: '140px' }}
@@ -437,12 +435,12 @@ function Achievements({
             {/* Glitter/Shine Effect */}
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-indigo-600 via-blue-500 to-purple-600 bg-[length:200%_200%] animate-gradient-shine opacity-90 group-hover:opacity-100 transition-opacity" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent" />
-            
+
             {/* Glitter Overlay */}
             <div className="absolute inset-0 overflow-hidden">
               <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-transparent via-white/30 to-transparent transform rotate-45 animate-shimmer" />
             </div>
-            
+
             <div className="relative p-6 md:p-8 flex items-center gap-4 md:gap-6">
               {/* Logo/Icon */}
               <div className="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl bg-white/25 backdrop-blur-sm flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 border-2 border-white/40">
@@ -478,10 +476,10 @@ function Achievements({
 
       {/* Stay Connected */}
       <div className="text-center mt-16">
-        <h2 className="font-bold text-3xl text-dark">
-          Stay <span className="text-pink-500">Connected</span>
+        <h2 className="font-bold text-3xl text-white">
+          Stay <span className="text-pink-400">Connected</span>
         </h2>
-        <p className="text-gray-600 mt-2 text-lg">
+        <p className="text-gray-300 mt-2 text-lg">
           Follow us on social media and never miss an update!
         </p>
 
