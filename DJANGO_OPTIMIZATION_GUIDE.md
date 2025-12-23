@@ -6,6 +6,8 @@
 2. **No Backend Caching** - Every request hits the database
 3. **PythonAnywhere** - Free tier has limitations
 
+**API Base URL:** `https://backendbadminton.pythonanywhere.com/api/`
+
 ## ✅ Solution 1: Fix Image Serving (BIGGEST IMPACT)
 
 ### Problem: Base64 images in JSON make responses massive (2-5MB)
@@ -57,6 +59,15 @@ class CompletedEventViewSet(viewsets.ModelViewSet):
 ```
 
 **Impact:** Reduces API response from 2-5MB to ~5-10KB (99% reduction!)
+
+**Example API Response:**
+```json
+{
+  "id": 1,
+  "event_name": "Badminton Championship",
+  "poster": "https://backendbadminton.pythonanywhere.com/media/posters/event1.jpg"
+}
+```
 
 ---
 
@@ -224,4 +235,10 @@ def get_poster(self, obj):
 
 Instead of returning 2MB base64 string, return a URL like:
 `https://backendbadminton.pythonanywhere.com/media/posters/event1.jpg`
+
+**API Endpoints:**
+- Events: `https://backendbadminton.pythonanywhere.com/api/events/`
+- Completed Events: `https://backendbadminton.pythonanywhere.com/api/completed-events/`
+- Event Results: `https://backendbadminton.pythonanywhere.com/api/event-results/`
+- Registrations: `https://backendbadminton.pythonanywhere.com/api/registrations/`
 
