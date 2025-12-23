@@ -12,7 +12,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-black text-white z-50 shadow-lg">
+    <nav className="fixed top-0 left-0 w-full h-16 bg-black text-white z-50 shadow-lg border-b border-white/10">
       <div className="w-full flex items-center justify-between py-2 px-4">
         {/* Logo */}
         <div className="flex items-center space-x-2">
@@ -69,8 +69,8 @@ export default function Navbar() {
             className="absolute top-full left-0 w-full bg-black text-white md:hidden shadow-lg"
           >
             <div className="flex justify-end p-2">
-              <button 
-                className="text-xl hover:text-pink-400 transition-colors" 
+              <button
+                className="text-xl hover:text-pink-400 transition-colors"
                 onClick={() => setOpen(false)}
               >
                 ✖
